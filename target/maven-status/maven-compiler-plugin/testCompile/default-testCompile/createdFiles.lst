@@ -1,0 +1,12 @@
+com\finca\arriendo\UsuarioServiceTests.class
+com\finca\arriendo\FincaServiceTests.class
+com\finca\arriendo\SolicitudServiceTests.class
+com\finca\arriendo\UsuarioControllerTests.class
+com\finca\arriendo\SolicitudTests.class
+com\finca\arriendo\UsuarioTests.class
+com\finca\arriendo\EstadoTests.class
+com\finca\arriendo\FincaTests.class
+com\finca\arriendo\ArriendoApplicationTests.class
+com\finca\arriendo\TipoTests.class
+com\finca\arriendo\FincaControllerTests.class
+com\finca\arriendo\SolicitudControllerTests.class
