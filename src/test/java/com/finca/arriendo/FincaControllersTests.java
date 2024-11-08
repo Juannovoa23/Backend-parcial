@@ -105,9 +105,8 @@ class FincaControllerTests {
 void testCalificarFinca() throws Exception {
     FincaDto calificacionDto = new FincaDto();
     calificacionDto.setCalificacion(5);
-    calificacionDto.setComentarios("Excelente");
 
-    when(fincaService.calificarFinca(1L, 5, new String[] {"Excelente"})).thenReturn(calificacionDto);
+    when(fincaService.calificarFinca(1L, 5)).thenReturn(calificacionDto);
 
     ResponseEntity<FincaDto> result = fincaController.calificarFinca(1L, calificacionDto);
 
@@ -119,13 +118,12 @@ void testCalificarFinca() throws Exception {
 void testCalificarArrendatario() throws Exception {
     FincaDto calificacionDto = new FincaDto();
     calificacionDto.setCalificacion(4);
-    calificacionDto.setComentarios("Buena experiencia");
 
-    doNothing().when(fincaService).calificarArrendatario(1L, 4, new String[] {"Buena experiencia"});
+    doNothing().when(fincaService).calificarArrendatario(1L, 4);
 
     ResponseEntity<Void> result = fincaController.calificarArrendatario(1L, calificacionDto);
     
     assertEquals(HttpStatus.OK, result.getStatusCode());
-    doNothing().when(fincaService).calificarArrendatario(1L, 4, new String[] {"Buena experiencia"});
+    doNothing().when(fincaService).calificarArrendatario(1L, 4);
 }
 }

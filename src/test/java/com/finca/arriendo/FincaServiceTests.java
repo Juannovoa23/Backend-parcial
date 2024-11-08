@@ -42,12 +42,9 @@ class FincaServiceTests {
         finca = new Finca();
         finca.setId(1);
         finca.setCalificacion(0);
-        finca.setComentarios(new String[] {"Comentarios iniciales"});
-
         fincaDto = new FincaDto();
         fincaDto.setId(1L);
         fincaDto.setCalificacion(5);
-        fincaDto.setComentarios("Excelente");
     }
 
     @Test
@@ -130,7 +127,7 @@ class FincaServiceTests {
         when(fincaRepository.save(finca)).thenReturn(finca);
         when(modelMapper.map(finca, FincaDto.class)).thenReturn(fincaDto);
 
-        FincaDto result = fincaService.calificarFinca(1L, 5, new String[] {"Excelente"});
+        FincaDto result = fincaService.calificarFinca(1L, 5);
 
         // Verifica que la calificación se haya actualizado
         assertEquals(5, finca.getCalificacion());
@@ -141,7 +138,7 @@ class FincaServiceTests {
     void testCalificarFincaNotFound() {
         when(fincaRepository.findById(1L)).thenReturn(Optional.empty());
 
-        FincaDto result = fincaService.calificarFinca(1L, 5, new String[] {"Excelente"});
+        FincaDto result = fincaService.calificarFinca(1L, 5);
         assertNull(result); // Debe devolver null si no se encuentra la finca
     }
 }

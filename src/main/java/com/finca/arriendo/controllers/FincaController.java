@@ -102,22 +102,24 @@ public ResponseEntity<FincaDto> update(@RequestBody FincaDto fincaDto) {
 
     @PutMapping("/calificar/{id}")
     public ResponseEntity<FincaDto> calificarFinca(@PathVariable Long id, @RequestBody FincaDto calificacionDto) {
-        try {
-            FincaDto calificada = fincaService.calificarFinca(id, calificacionDto.getCalificacion(), new String[] {calificacionDto.getComentarios()});
-            if (calificada != null) {
-                return new ResponseEntity<>(calificada, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+       try {
+        // Llamada al servicio solo con la calificación, sin comentarios
+        FincaDto calificada = fincaService.calificarFinca(id, (int) calificacionDto.getCalificacion());
+        if (calificada != null) {
+            return new ResponseEntity<>(calificada, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    } catch (Exception e) {
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+}
+
 
     @PutMapping("/calificar-arrendatario/{solicitudId}")
     public ResponseEntity<Void> calificarArrendatario(@PathVariable Long solicitudId, @RequestBody FincaDto calificacionDto) {
         try {
-            fincaService.calificarArrendatario(solicitudId, calificacionDto.getCalificacion(), new String[] {calificacionDto.getComentarios()});
+            fincaService.calificarArrendatario(solicitudId, calificacionDto.getCalificacion());
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

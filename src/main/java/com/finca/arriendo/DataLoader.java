@@ -61,61 +61,78 @@ public class DataLoader implements CommandLineRunner {
 
         // Crear fincas de prueba
         List<Finca> fincas = Arrays.asList(
-    new Finca(null, "Finca La Estrella", "Ubicación 1", "Medellín", "Antioquia", true, 5, 
-        "Finca amplia con piscina, rodeada de montañas y naturaleza. Ofrece un espacio tranquilo ideal para descansar y disfrutar en familia. Tiene áreas verdes amplias, zona de BBQ, y acceso cercano a rutas de senderismo.", 
-        10, 1500.0f, null, null, usuarios.get(0), false),
-    
-    new Finca(null, "Finca El Paraíso", "Ubicación 2", "Santa Marta", "Magdalena", true, 4, 
-        "Finca con vista al mar, ideal para disfrutar de la brisa marina y el paisaje tropical. Cuenta con espacios modernos y cómodos, y ofrece una experiencia única para aquellos que buscan relajarse frente al mar.", 
-        8, 2000.0f, null, null, usuarios.get(2), false),
-    
-    new Finca(null, "Finca Bella Vista", "Ubicación 3", "Cali", "Valle del Cauca", true, 5, 
-        "Finca rodeada de naturaleza y vegetación exótica, perfecta para aquellos que buscan un ambiente natural. La finca incluye una zona de avistamiento de aves, senderos ecológicos y áreas de descanso al aire libre.", 
-        15, 1800.0f, null, null, usuarios.get(0), false),
-    
-    new Finca(null, "Finca Los Álamos", "Ubicación 4", "Bogotá", "Cundinamarca", true, 3, 
-        "Ideal para eventos especiales, la finca ofrece una gran sala de reuniones y espacios amplios. Su ubicación estratégica permite un fácil acceso a la ciudad y a la vez proporciona un ambiente campestre y acogedor.", 
-        12, 1300.0f, null, null, usuarios.get(3), false),
-    
-    new Finca(null, "Finca La Cascada", "Ubicación 5", "Manizales", "Caldas", true, 5, 
-        "Con cascada natural, esta finca es un paraíso escondido perfecto para quienes buscan un escape a la naturaleza. Incluye una gran piscina al aire libre, áreas de picnic, y caminos para explorar la flora local.", 
-        20, 2100.0f, null, null, usuarios.get(1), false),
-    
-    new Finca(null, "Finca Los Cerezos", "Ubicación 1", "Medellín", "Antioquia", true, 5, 
-        "Ideal para eventos familiares, esta finca ofrece amplios espacios y jardines encantadores. Cuenta con instalaciones para actividades deportivas, zona de juegos para niños y un hermoso jardín de cerezos.", 
-        20, 2500.0f, null, null, usuarios.get(0), false),
-    
-    new Finca(null, "Finca El Encanto", "Ubicación 2", "Cali", "Valle del Cauca", true, 4, 
-        "Rodeada de naturaleza, esta finca es el lugar perfecto para aquellos que desean conectarse con la flora y fauna local. Sus áreas verdes, junto con un hermoso lago, proporcionan una experiencia de paz y tranquilidad.", 
-        15, 2000.0f, null, null, usuarios.get(1), false),
-    
-    new Finca(null, "Finca La Esperanza", "Ubicación 3", "Bogotá", "Cundinamarca", true, 6, 
-        "Con piscina y BBQ, esta finca es ideal para reuniones grandes. Ofrece instalaciones modernas, un área de juegos y entretenimiento, y un gran salón para eventos, todo en un ambiente natural.", 
-        25, 3000.0f, null, null, usuarios.get(2), false),
-    
-    new Finca(null, "Finca El Bosque", "Ubicación 15", "Barranquilla", "Atlántico", true, 5, 
-        "Finca rodeada de árboles y fauna, un lugar ideal para los amantes de la naturaleza. Ofrece cabañas rústicas, áreas de camping, y actividades al aire libre como senderismo y observación de vida silvestre.", 
-        16, 1700.0f, null, null, usuarios.get(14), false),
-    
-    new Finca(null, "Finca Tierra Blanca", "Ubicación 16", "Cali", "Valle del Cauca", true, 4, 
-        "Ideal para eventos corporativos, la finca cuenta con espacios de reunión, proyector, y salón de conferencias. Rodeada de un entorno verde, brinda un ambiente perfecto para reuniones empresariales.", 
-        12, 1400.0f, null, null, usuarios.get(15), false),
-    
-    new Finca(null, "Finca La Palma", "Ubicación 17", "Medellín", "Antioquia", true, 3, 
-        "Con área para camping, esta finca es perfecta para los aventureros. Ofrece instalaciones básicas y está rodeada de paisajes montañosos, ideal para noches bajo las estrellas y fogatas.", 
-        8, 1200.0f, null, null, usuarios.get(16), false),
-    
-    new Finca(null, "Finca Sagrado Corazón", "Ubicación 18", "Manizales", "Caldas", true, 5, 
-        "Finca con cabañas y naturaleza, proporciona un ambiente hogareño en medio de la naturaleza. Ideal para retiros familiares, cuenta con una pequeña capilla y áreas de descanso al aire libre.", 
-        14, 1600.0f, null, null, usuarios.get(17), false),
-    
-    new Finca(null, "Finca El Sol", "Ubicación 19", "Cali", "Valle del Cauca", true, 4, 
-        "Finca con vista panorámica de la región, ofrece terrazas donde se pueden disfrutar de atardeceres impresionantes. Cuenta con jardines, piscina, y una zona de descanso con vista a las montañas.", 
-        18, 2000.0f, null, null, usuarios.get(18), false),
-    
-    new Finca(null, "Finca La Esperanza", "Ubicación 20", "Cúcuta", "Norte de Santander", true, 5, 
-        "Finca ideal para vacaciones familiares, equipada con una gran piscina, canchas deportivas y área de recreación. Un lugar perfecto para disfrutar de días soleados en un ambiente tranquilo.", 
-        20, 2200.0f, null, null, usuarios.get(19), false)
+            new Finca(null, "Finca La Estrella", "Ubicación 1", "Medellín", "Antioquia", true, 5,
+            "Finca amplia con piscina, rodeada de montañas y naturaleza. Ofrece un espacio tranquilo ideal para descansar y disfrutar en familia. Tiene áreas verdes amplias, zona de BBQ, y acceso cercano a rutas de senderismo.",
+            10, 1500.0f, null, usuarios.get(0), false),
+        new Finca(null, "Finca El Paraíso", "Ubicación 2", "Santa Marta", "Magdalena", true, 4,
+            "Finca con vista al mar, ideal para disfrutar de la brisa marina y el paisaje tropical. Cuenta con espacios modernos y cómodos, y ofrece una experiencia única para aquellos que buscan relajarse frente al mar.",
+            8, 2000.0f, null, usuarios.get(2), false),
+        new Finca(null, "Finca Bella Vista", "Ubicación 3", "Cali", "Valle del Cauca", true, 5,
+            "Finca rodeada de naturaleza y vegetación exótica, perfecta para aquellos que buscan un ambiente natural. La finca incluye una zona de avistamiento de aves, senderos ecológicos y áreas de descanso al aire libre.",
+            15, 1800.0f, null, usuarios.get(0), false),
+            new Finca(null, "Finca El Refugio", "Ubicación 6", "Villavicencio", "Meta", true, 4, 
+        "Refugio tranquilo cerca de la selva, ideal para amantes de la naturaleza y el ecoturismo.", 
+        8, 1800.0f, null, usuarios.get(4), false),
+
+    new Finca(null, "Finca Monte Verde", "Ubicación 7", "Pereira", "Risaralda", true, 5, 
+        "Rodeada de montañas y cafetales, ofrece un ambiente relajante para desconectar.", 
+        12, 1700.0f, null, usuarios.get(5), false),
+
+    new Finca(null, "Finca El Mirador", "Ubicación 8", "Cartagena", "Bolívar", true, 3, 
+        "Finca con vistas panorámicas a la ciudad y al mar, perfecta para eventos.", 
+        15, 2200.0f, null, usuarios.get(6), false),
+
+    new Finca(null, "Finca Sol y Luna", "Ubicación 9", "Tunja", "Boyacá", true, 5, 
+        "Finca en una zona montañosa, con acceso a rutas de senderismo y actividades de aventura.", 
+        10, 1600.0f, null, usuarios.get(7), false),
+
+    new Finca(null, "Finca La Brisa", "Ubicación 10", "Neiva", "Huila", true, 4, 
+        "Finca cerca del río Magdalena, ideal para disfrutar de la brisa y las actividades acuáticas.", 
+        8, 1400.0f, null, usuarios.get(8), false),
+
+    new Finca(null, "Finca La Aurora", "Ubicación 11", "Bucaramanga", "Santander", true, 5, 
+        "Con vistas a las montañas, esta finca es perfecta para un retiro tranquilo.", 
+        15, 2100.0f, null, usuarios.get(9), false),
+
+    new Finca(null, "Finca El Encanto Verde", "Ubicación 12", "Popayán", "Cauca", true, 4, 
+        "Finca con jardines exóticos y un entorno natural para el descanso.", 
+        7, 1350.0f, null, usuarios.get(10), false),
+
+    new Finca(null, "Finca La Pradera", "Ubicación 13", "Armenia", "Quindío", true, 3, 
+        "Finca campestre con amplios jardines y espacio para eventos familiares.", 
+        20, 1550.0f, null, usuarios.get(11), false),
+
+    new Finca(null, "Finca Buenavista", "Ubicación 14", "Montería", "Córdoba", true, 4, 
+        "Finca con zona de BBQ, ideal para reuniones sociales y celebraciones.", 
+        10, 1700.0f, null, usuarios.get(12), false),
+
+    new Finca(null, "Finca La Paz", "Ubicación 15", "Leticia", "Amazonas", true, 5, 
+        "Ubicada en el Amazonas, ofrece una experiencia única en contacto con la selva.", 
+        5, 2500.0f, null, usuarios.get(13), false),
+
+    new Finca(null, "Finca Tierra Bonita", "Ubicación 16", "Sincelejo", "Sucre", true, 3, 
+        "Rodeada de naturaleza tropical, esta finca es ideal para días de descanso.", 
+        12, 1450.0f, null, usuarios.get(14), false),
+
+    new Finca(null, "Finca El Manantial", "Ubicación 17", "Florencia", "Caquetá", true, 5, 
+        "Finca con acceso a un manantial natural y áreas de descanso al aire libre.", 
+        8, 1900.0f, null, usuarios.get(15), false),
+
+    new Finca(null, "Finca Vista Hermosa", "Ubicación 18", "Quibdó", "Chocó", true, 4, 
+        "Ubicada en el corazón del Chocó, ofrece una experiencia de conexión con la biodiversidad.", 
+        15, 1800.0f, null, usuarios.get(16), false),
+
+    new Finca(null, "Finca Los Rosales", "Ubicación 19", "Pasto", "Nariño", true, 4, 
+        "Finca con jardines de rosas y zonas de descanso para disfrutar la tranquilidad del campo.", 
+        6, 1750.0f, null, usuarios.get(17), false),
+
+    new Finca(null, "Finca Alto Cielo", "Ubicación 20", "Riohacha", "La Guajira", true, 3, 
+        "Finca con vistas al desierto, ideal para explorar la región y descansar en un entorno único.", 
+        8, 1600.0f, null, usuarios.get(18), false),
+
+    new Finca(null, "Finca Las Margaritas", "Ubicación 21", "Arauca", "Arauca", true, 5, 
+        "Finca con ambiente campestre, ideal para retiros y eventos familiares en contacto con la naturaleza.", 
+        10, 1650.0f, null, usuarios.get(19), false)
 );
 
         //Guardar fincas

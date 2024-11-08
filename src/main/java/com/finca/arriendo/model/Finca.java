@@ -2,7 +2,6 @@ package com.finca.arriendo.model;
 
 import java.util.List;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -35,8 +34,6 @@ public class Finca {
     private String descripcion; // Descripción de la finca
     private Integer capacidad; // Capacidad máxima de personas en la finca
     private Float precioDefecto; // Precio por defecto para el arriendo
-    @Column(length = 500)
-    private String comentarios[]; // Comentarios adicionales
 
     @OneToMany(mappedBy = "finca")
     private List<Solicitud> solicitudes; // Relación con las solicitudes de arriendo
@@ -76,10 +73,6 @@ public class Finca {
         this.deleted = deleted;
     }
 
-    public void setComentarios(String comentarios[]) {
-        this.comentarios = comentarios;
-    }
-
     public String getNombre() {
         return this.nombre;
     }
@@ -110,6 +103,14 @@ public class Finca {
     
         // Si todas las condiciones se cumplen, la finca está disponible para el rango de fechas
         return true;
+    }
+
+    public String getDescripcion() {
+        return this.descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
 }

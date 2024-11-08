@@ -169,7 +169,7 @@ public class Solicitud {
         return this.califArrendatario;
     }
 
-    public void calificarArrendatario(int calificacion, String comentarios[]) {
+    public void calificarArrendatario(int calificacion) {
         this.califArrendatario = calificacion;
     }
 

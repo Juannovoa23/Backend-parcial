@@ -74,8 +74,8 @@ public class ModelMapperConfiguration {
             mapping.map(Finca::getPrecioDefecto, FincaDto::setPrecioDefecto);
             mapping.map(Finca::getDisponible, FincaDto::setDisponible);
             mapping.map(Finca::getCalificacion, FincaDto::setCalificacion);
-            mapping.map(Finca::getComentarios, FincaDto::setComentarios);
             mapping.map(Finca::getCapacidad, FincaDto::setCapacidad);
+            mapping.map(Finca::getDescripcion, FincaDto::setDescripcion);
         });
 
         modelMapper.createTypeMap(FincaDto.class, Finca.class).addMappings(mapping -> {
@@ -87,8 +87,8 @@ public class ModelMapperConfiguration {
             mapping.map(FincaDto::getPrecioDefecto, Finca::setPrecioDefecto);
             mapping.map(FincaDto::getDisponible, Finca::setDisponible);
             mapping.map(FincaDto::getCalificacion, Finca::setCalificacion);
-            mapping.map(FincaDto::getComentarios, Finca::setComentarios);
             mapping.map(FincaDto::getCapacidad, Finca::setCapacidad);
+            mapping.map(FincaDto::getDescripcion, Finca::setDescripcion);
         });
 
         return modelMapper;

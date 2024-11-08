@@ -60,7 +60,6 @@ public class FincaService {
         finca.setUbicacion(fincaDto.getUbicacion());
         finca.setDisponible(fincaDto.getDisponible());
         finca.setCalificacion(fincaDto.getCalificacion());
-        finca.setComentarios(fincaDto.getComentarios().split(","));
         finca.setCapacidad(fincaDto.getCapacidad());
         finca.setDepartamento(fincaDto.getDepartamento());
         finca.setMunicipio(fincaDto.getMunicipio());
@@ -81,7 +80,6 @@ public class FincaService {
         finca.setUbicacion(fincaDto.getUbicacion());
         finca.setDisponible(fincaDto.getDisponible());
         finca.setCalificacion(fincaDto.getCalificacion());
-        finca.setComentarios(fincaDto.getComentarios().split(","));
         finca.setCapacidad(fincaDto.getCapacidad());
         finca.setDepartamento(fincaDto.getDepartamento());
         finca.setMunicipio(fincaDto.getMunicipio());
@@ -98,11 +96,11 @@ public class FincaService {
     }
 
     //Función para calificar el arrendatario
-    public void calificarArrendatario(Long solicitudId, int calificacion, String[] comentarios) {
+    public void calificarArrendatario(Long solicitudId, int calificacion) {
     Optional<Solicitud> solicitudOptional = solicitudRepository.findById(solicitudId);
     if (solicitudOptional.isPresent()) {
         Solicitud solicitud = solicitudOptional.get();
-        solicitud.calificarArrendatario(calificacion, comentarios); 
+        solicitud.calificarArrendatario(calificacion); 
         solicitudRepository.save(solicitud);
         verificarCalificaciones(solicitud); 
     }
@@ -115,7 +113,7 @@ private void verificarCalificaciones(Solicitud solicitud) {
     }
 }
 
-    public FincaDto calificarFinca(Long fincaId, int calificacion, String[] strings) {
+    public FincaDto calificarFinca(Long fincaId, int calificacion) {
         Optional<Finca> fincaOptional = fincaRepository.findById(fincaId);
         if (fincaOptional.isPresent()) {
             Finca finca = fincaOptional.get();

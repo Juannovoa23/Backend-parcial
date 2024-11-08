@@ -24,7 +24,7 @@ public class FincaDto {
     private String ubicacion; // Ubicación de la finca (posiblemente como texto)
     private Boolean disponible; // Estado de disponibilidad (true: disponible, false: no disponible)
     private int calificacion; // Calificación de la finca
-    private String comentarios; // Comentarios adicionales sobre la finca
+    private String descripcion; // Comentarios adicionales sobre la finca
     private int capacidad; // Capacidad máxima de personas en la finca
     private String departamento; // Departamento donde se ubica la finca
     private String municipio; // Municipio donde se ubica la finca
