@@ -24,7 +24,6 @@ public class SolicitudController {
 
     private final SolicitudService solicitudService;
 
-    
     public SolicitudController(SolicitudService solicitudService) {
         this.solicitudService = solicitudService;
     }

@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.finca.arriendo.dto.SolicitudDto;
-import com.finca.arriendo.model.Estado;
 import com.finca.arriendo.model.Solicitud;
 import com.finca.arriendo.repository.SolicitudRepository;
 
@@ -16,7 +15,6 @@ public class SolicitudService {
 
     private final SolicitudRepository solicitudRepository;
 
-    
     public SolicitudService(SolicitudRepository solicitudRepository) {
         this.solicitudRepository = solicitudRepository;
     }
@@ -24,7 +22,6 @@ public class SolicitudService {
     // Crear una nueva solicitud
     public SolicitudDto crearSolicitud(SolicitudDto solicitudDto) {
         Solicitud solicitud = new Solicitud();
-        // Mapear DTO a entidad
         mapToEntity(solicitudDto, solicitud);
         Solicitud nuevaSolicitud = solicitudRepository.save(solicitud);
         return mapToDto(nuevaSolicitud);
@@ -68,10 +65,6 @@ public class SolicitudService {
         if (optionalSolicitud.isPresent()) {
             Solicitud solicitud = optionalSolicitud.get();
             solicitud.setCalifArrendatario(calificacion);
-            // Cambiar el estado si la calificación se ha completado
-            if (solicitud.getCalifFinca() != null) {
-                solicitud.setEstado(Estado.CERRADO);
-            }
             Solicitud updatedSolicitud = solicitudRepository.save(solicitud);
             return Optional.of(mapToDto(updatedSolicitud));
         }
@@ -84,10 +77,6 @@ public class SolicitudService {
         if (optionalSolicitud.isPresent()) {
             Solicitud solicitud = optionalSolicitud.get();
             solicitud.setCalifFinca(calificacion);
-            // Cambiar el estado si la calificación se ha completado
-            if (solicitud.getCalifArrendatario() != null) {
-                solicitud.setEstado(Estado.CERRADO);
-            }
             Solicitud updatedSolicitud = solicitudRepository.save(solicitud);
             return Optional.of(mapToDto(updatedSolicitud));
         }
@@ -106,10 +95,6 @@ public class SolicitudService {
         dto.setCantPersonas(solicitud.getCantPersonas());
         dto.setNumeroCuenta(solicitud.getNumeroCuenta());
         dto.setBanco(solicitud.getBanco());
-        dto.setEstado(solicitud.getEstado().name());
-        // Aquí puedes incluir la lógica para establecer la visibilidad
-        dto.setPagoVisible(calcularPagoVisible(dto.getEstado()));
-        dto.setCalificacionVisible(calcularCalificacionVisible(dto.getEstado()));
         return dto;
     }
 
@@ -122,17 +107,6 @@ public class SolicitudService {
         solicitud.setCantPersonas(dto.getCantPersonas());
         solicitud.setNumeroCuenta(dto.getNumeroCuenta());
         solicitud.setBanco(dto.getBanco());
-        // Convertir el String a un objeto de tipo Estado
-        Estado estado = Estado.valueOf(dto.getEstado());
-        solicitud.setEstado(estado);
-    }
-
-    private boolean calcularPagoVisible(String estado) {
-        return estado.equals("EN_PAGO") && !estado.equals("VENCIDA");
-    }
-
-    private boolean calcularCalificacionVisible(String estado) {
-        return estado.equals("CERRADO");
     }
 
     public List<SolicitudDto> findByArrendatarioId(Long id) {
@@ -147,18 +121,11 @@ public class SolicitudService {
         .orElseThrow(() -> {
             throw new ResourceNotFoundException("No se encontró la solicitud con el ID: " + id);
         });
-    
-        // Realizar la calificación
+
         solicitud.setCalifFinca(calificacionDto.getCalifFinca());
         solicitud.setCalifArrendatario(calificacionDto.getCalifArrendatario());
-    
-        // Actualizar la solicitud con la calificación
         Solicitud solicitudActualizada = solicitudRepository.save(solicitud);
-    
-        // Mapear la solicitud actualizada a un objeto de tipo SolicitudDto
-        SolicitudDto solicitudDto = mapToDto(solicitudActualizada);
-    
-        return Optional.of(solicitudDto);
+        return Optional.of(mapToDto(solicitudActualizada));
     }
 
     public class ResourceNotFoundException extends RuntimeException {
@@ -172,13 +139,8 @@ public class SolicitudService {
         
         if (optionalSolicitud.isPresent()) {
             Solicitud solicitud = optionalSolicitud.get();
-            
-            // Aquí puedes establecer el estado de la solicitud como "EN_PAGO"
-            solicitud.setEstado(Estado.EN_PAGO); 
             solicitud.setNumeroCuenta(numeroCuenta); 
             solicitud.setBanco(banco);
-            
-            // Guarda los cambios en la base de datos
             Solicitud updatedSolicitud = solicitudRepository.save(solicitud);
             return Optional.of(mapToDto(updatedSolicitud)); 
         }
