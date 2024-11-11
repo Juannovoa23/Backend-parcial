@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.any;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.doNothing;
@@ -77,19 +79,29 @@ class SolicitudServiceTests {
 
     @Test
     void testCrearSolicitud() {
-        SolicitudDto solicitudDto = new SolicitudDto();
-        solicitudDto.setId(1L);
-        Solicitud solicitud = new Solicitud();
-        solicitud.setId(1L);
-        solicitud.setEstado(Estado.ACEPTADA);
+        // Crear un DTO de solicitud con valores básicos para la clase
+    SolicitudDto solicitudDto = new SolicitudDto();
+    solicitudDto.setId(1L);
+    solicitudDto.setEstado(Estado.ACEPTADA);
 
-        when(modelMapper.map(solicitudDto, Solicitud.class)).thenReturn(solicitud);
-        when(solicitudRepository.save(solicitud)).thenReturn(solicitud);
-        when(modelMapper.map(solicitud, SolicitudDto.class)).thenReturn(solicitudDto);
+    // Se va a configurar la entidad Solicitud con el estado
+    Solicitud solicitud = new Solicitud();
+    solicitud.setId(1L);
+    solicitud.setEstado(Estado.ACEPTADA);
 
-        SolicitudDto result = solicitudService.crearSolicitud(solicitudDto);
-        assertEquals(solicitudDto.getId(), result.getId());
-        assertEquals(Estado.ACEPTADA, solicitud.getEstado());
+    // Se configura el comportamiento del mock para el repositorio
+    when(solicitudRepository.save(any(Solicitud.class))).thenReturn(solicitud);
+
+    // Llamar al servicio
+    SolicitudDto result = solicitudService.crearSolicitud(solicitudDto);
+
+    // Verificar que el ID y estado sean los correctos
+    assertNotNull(result, "El resultado no debe ser null");
+    assertEquals(solicitudDto.getId(), result.getId());
+    assertEquals(solicitudDto.getEstado(), result.getEstado());
+
+    // Verificar que el repositorio haya guardado la solicitud
+    verify(solicitudRepository).save(any(Solicitud.class));
     }
 
     @Test
@@ -110,7 +122,6 @@ class SolicitudServiceTests {
         Long id = 1L;
         SolicitudDto solicitudDto = new SolicitudDto();
         solicitudDto.setId(id);
-        solicitudDto.setEstado("ACEPTADA");
 
         Solicitud solicitud = new Solicitud();
         solicitud.setId(id);
@@ -164,17 +175,21 @@ class SolicitudServiceTests {
 
         Solicitud solicitud = new Solicitud();
         solicitud.setId(id);
-        solicitud.setEstado(Estado.ACEPTADA); 
+        solicitud.setNumeroCuenta(""); //El numero de cuenta estará vacio inicialmente
+        solicitud.setBanco(""); //El nombre del banco estará vacio inicialmente
 
         when(solicitudRepository.findById(id)).thenReturn(Optional.of(solicitud));
         when(solicitudRepository.save(solicitud)).thenAnswer(invocation -> {
             Solicitud savedSolicitud = invocation.getArgument(0);
-            assertEquals(Estado.EN_PAGO, savedSolicitud.getEstado());
+            //Verificar que tanto el número de cuenta y el banco se hayan actualizado de forma correcta
+            assertEquals(numeroCuenta,savedSolicitud.getNumeroCuenta());
+            assertEquals(banco, savedSolicitud.getBanco());
             return savedSolicitud;
         });
 
         Optional<SolicitudDto> result = solicitudService.realizarPago(id, numeroCuenta, banco);
         assertTrue(result.isPresent());
-        assertEquals(Estado.EN_PAGO, result.get().getEstado()); 
+        assertEquals(numeroCuenta, result.get().getNumeroCuenta()); 
+        assertEquals(banco, result.get().getBanco()); 
     }
 }

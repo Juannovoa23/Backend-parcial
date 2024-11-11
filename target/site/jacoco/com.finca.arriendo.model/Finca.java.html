@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Finca.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">arriendo</a> &gt; <a href="index.source.html" class="el_package">com.finca.arriendo.model</a> &gt; <span class="el_source">Finca.java</span></div><h1>Finca.java</h1><pre class="source lang-java linenums">package com.finca.arriendo.model;
+
+import java.util.List;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+
+public class Finca {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; // id de la finca
+    private String nombre; // Nombre de la finca
+    private String ubicacion; // Identificador de ubicación
+    private String municipio; // Municipio de la finca
+    private String departamento; // Departamento de la finca
+    private Boolean disponible; // Cantidad disponible (1: disponible, 0: no disponible)
+    private Integer calificacion; // Calificación de la finca
+    private String descripcion; // Descripción de la finca
+    private Integer capacidad; // Capacidad máxima de personas en la finca
+    private Float precioDefecto; // Precio por defecto para el arriendo
+
+    @OneToMany(mappedBy = &quot;finca&quot;)
+    private List&lt;Solicitud&gt; solicitudes; // Relación con las solicitudes de arriendo
+
+    @ManyToOne // Relación con Usuario (dueño)
+    @JoinColumn(name = &quot;dueño_id&quot;, nullable = false) 
+    private Usuario dueño;
+
+    private boolean deleted;
+
+    // Método para calificar la finca
+    public void calificar(Integer calificacion) {
+        // Verificar que la calificación esté en un rango válido (ejemplo: 1 a 5)
+<span class="pc bpc" id="L50" title="2 of 4 branches missed.">        if (calificacion &gt;= 1 &amp;&amp; calificacion &lt;= 5) {</span>
+<span class="fc" id="L51">            this.calificacion = calificacion; // Asignar calificación</span>
+        } else {
+<span class="nc" id="L53">            throw new IllegalArgumentException(&quot;La calificación debe estar entre 1 y 5.&quot;);</span>
+        }
+<span class="fc" id="L55">    }</span>
+
+    public Long getId() {
+<span class="fc" id="L58">        return this.id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="fc" id="L62">        this.id = id;</span>
+<span class="fc" id="L63">    }</span>
+
+    // Método para verificar disponibilidad
+    public boolean isDisponible() {
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        return this.disponible == true; // Devuelve true si está disponible</span>
+    }
+
+    // Método para actualizar la disponibilidad
+    public void actualizarDisponibilidad(boolean nuevaDisponibilidad) {
+<span class="nc" id="L72">        this.disponible = nuevaDisponibilidad; // Actualiza la disponibilidad</span>
+<span class="nc" id="L73">    }</span>
+
+    // Método para marcar la finca como eliminada
+    public void setDeleted(boolean deleted) {
+<span class="fc" id="L77">        this.deleted = deleted;</span>
+<span class="fc" id="L78">    }</span>
+
+    public String getNombre() {
+<span class="fc" id="L81">        return this.nombre;</span>
+    }
+
+    public void setNombre(String nombre) {
+<span class="fc" id="L85">        this.nombre = nombre;</span>
+<span class="fc" id="L86">    }</span>
+
+    public Float getPrecioDefecto(){
+<span class="fc" id="L89">        return this.precioDefecto;</span>
+    }
+
+    public void setPrecioDefecto(Float precioDefecto) {
+<span class="fc" id="L93">        this.precioDefecto=precioDefecto;</span>
+<span class="fc" id="L94">    }</span>
+
+    public void setUbicacion(String ubicacion) {
+<span class="fc" id="L97">        this.ubicacion = ubicacion;</span>
+<span class="fc" id="L98">    }</span>
+
+    public boolean estaDisponible(String fechaInicio, String fechaFin) {
+        // Verificar que la finca esté disponible
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        if (!this.isDisponible()) {</span>
+<span class="nc" id="L103">            return false;</span>
+        }
+    
+        // Verificar que las fechas sean válidas
+<span class="nc bnc" id="L107" title="All 8 branches missed.">        if (fechaInicio == null || fechaInicio.isEmpty() || fechaFin == null || fechaFin.isEmpty()) {</span>
+<span class="nc" id="L108">            return false;</span>
+        }
+    
+        // Verificar que la fecha de inicio sea anterior o igual a la fecha de fin
+<span class="nc bnc" id="L112" title="All 2 branches missed.">        if (fechaInicio.compareTo(fechaFin) &gt; 0) {</span>
+<span class="nc" id="L113">            return false;</span>
+        }
+    
+        // Si todas las condiciones se cumplen, la finca está disponible para el rango de fechas
+<span class="nc" id="L117">        return true;</span>
+    }
+
+    public String getDescripcion() {
+<span class="fc" id="L121">        return this.descripcion;</span>
+    }
+
+    public void setDescripcion(String descripcion) {
+<span class="fc" id="L125">        this.descripcion = descripcion;</span>
+<span class="fc" id="L126">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

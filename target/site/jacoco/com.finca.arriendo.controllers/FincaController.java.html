@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FincaController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">arriendo</a> &gt; <a href="index.source.html" class="el_package">com.finca.arriendo.controllers</a> &gt; <span class="el_source">FincaController.java</span></div><h1>FincaController.java</h1><pre class="source lang-java linenums">package com.finca.arriendo.controllers;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.finca.arriendo.dto.FincaDto;
+import com.finca.arriendo.services.FincaService;
+
+@RestController
+@RequestMapping(&quot;/api/finca&quot;)
+@CrossOrigin
+<span class="fc" id="L24">public class FincaController {</span>
+    
+    @Autowired
+    private FincaService fincaService;
+
+    @GetMapping(&quot;/list&quot;)
+    public ResponseEntity&lt;List&lt;FincaDto&gt;&gt; getAll() {
+        try {
+<span class="fc" id="L32">            List&lt;FincaDto&gt; fincas = fincaService.list();</span>
+<span class="fc" id="L33">            return new ResponseEntity&lt;&gt;(fincas, HttpStatus.OK);</span>
+<span class="nc" id="L34">        } catch (Exception e) {</span>
+<span class="nc" id="L35">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    @GetMapping(&quot;/get/{id}&quot;)
+    public ResponseEntity&lt;FincaDto&gt; getById(@PathVariable Long id) {
+        try {
+<span class="fc" id="L42">            FincaDto finca = fincaService.get(id);</span>
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">            if (finca != null) {</span>
+<span class="fc" id="L44">                return new ResponseEntity&lt;&gt;(finca, HttpStatus.OK);</span>
+            } else {
+<span class="nc" id="L46">                return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+            }
+<span class="nc" id="L48">        } catch (Exception e) {</span>
+<span class="nc" id="L49">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    @GetMapping(&quot;/getNom/{nombre}&quot;)
+    public ResponseEntity&lt;FincaDto&gt; obtenerPorNombre(@PathVariable String nombre) {
+        try {
+<span class="fc" id="L56">            FincaDto finca = fincaService.get(nombre);</span>
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">            if (finca != null) {</span>
+<span class="fc" id="L58">                return new ResponseEntity&lt;&gt;(finca, HttpStatus.OK);</span>
+            } else {
+<span class="nc" id="L60">                return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+            }
+<span class="nc" id="L62">        } catch (Exception e) {</span>
+<span class="nc" id="L63">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    @PostMapping(&quot;/create&quot;)
+    public ResponseEntity&lt;FincaDto&gt; save(@RequestBody FincaDto fincaDto) {
+        try {
+<span class="fc" id="L70">            FincaDto savedFinca = fincaService.saveNew(fincaDto);</span>
+<span class="fc" id="L71">            return new ResponseEntity&lt;&gt;(savedFinca, HttpStatus.CREATED);</span>
+<span class="nc" id="L72">        } catch (Exception e) {</span>
+<span class="nc" id="L73">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    @PutMapping(&quot;/update&quot;)
+public ResponseEntity&lt;FincaDto&gt; update(@RequestBody FincaDto fincaDto) {
+    try {
+        // Llamamos al método `update` en lugar de `save`
+<span class="fc" id="L81">        FincaDto updatedFinca = fincaService.update(fincaDto);</span>
+<span class="fc" id="L82">        return new ResponseEntity&lt;&gt;(updatedFinca, HttpStatus.OK);</span>
+<span class="nc" id="L83">    } catch (Exception e) {</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">        if (e.getMessage().equals(&quot;Finca no encontrada para el ID especificado&quot;)) {</span>
+<span class="nc" id="L85">            return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+        } else {
+<span class="nc" id="L87">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+}
+
+
+    @DeleteMapping(&quot;/delete&quot;)
+    public ResponseEntity&lt;Void&gt; delete(@RequestBody FincaDto fincaDto) {
+        try {
+<span class="fc" id="L96">            fincaService.delete(fincaDto);</span>
+<span class="fc" id="L97">            return new ResponseEntity&lt;&gt;(HttpStatus.NO_CONTENT);</span>
+<span class="nc" id="L98">        } catch (Exception e) {</span>
+<span class="nc" id="L99">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    @PutMapping(&quot;/calificar/{id}&quot;)
+    public ResponseEntity&lt;FincaDto&gt; calificarFinca(@PathVariable Long id, @RequestBody FincaDto calificacionDto) {
+       try {
+        // Llamada al servicio solo con la calificación, sin comentarios
+<span class="fc" id="L107">        FincaDto calificada = fincaService.calificarFinca(id, (int) calificacionDto.getCalificacion());</span>
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">        if (calificada != null) {</span>
+<span class="fc" id="L109">            return new ResponseEntity&lt;&gt;(calificada, HttpStatus.OK);</span>
+        } else {
+<span class="nc" id="L111">            return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+        }
+<span class="nc" id="L113">    } catch (Exception e) {</span>
+<span class="nc" id="L114">        return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+    }
+}
+
+
+    @PutMapping(&quot;/calificar-arrendatario/{solicitudId}&quot;)
+    public ResponseEntity&lt;Void&gt; calificarArrendatario(@PathVariable Long solicitudId, @RequestBody FincaDto calificacionDto) {
+        try {
+<span class="fc" id="L122">            fincaService.calificarArrendatario(solicitudId, calificacionDto.getCalificacion());</span>
+<span class="fc" id="L123">            return new ResponseEntity&lt;&gt;(HttpStatus.OK);</span>
+<span class="nc" id="L124">        } catch (Exception e) {</span>
+<span class="nc" id="L125">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    @GetMapping(&quot;/user/{usuarioId}/arrendador&quot;)
+    public ResponseEntity&lt;List&lt;FincaDto&gt;&gt; getFincasByUsuario(@PathVariable Long usuarioId) {
+        try {
+<span class="nc" id="L132">            List&lt;FincaDto&gt; fincas = fincaService.getFincasByUsuarioIdAndTipo(usuarioId);</span>
+<span class="nc" id="L133">            return new ResponseEntity&lt;&gt;(fincas, HttpStatus.OK);</span>
+<span class="nc" id="L134">        } catch (Exception e) {</span>
+<span class="nc" id="L135">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    @PutMapping(&quot;/{fincaId}/trasnferir/{id}&quot;)
+    public ResponseEntity&lt;String&gt;transferirFinca(@PathVariable Long fincaId, @PathVariable Long usuarioId) {
+     try {
+<span class="nc" id="L142">         fincaService.transferirFinca(fincaId, usuarioId);</span>
+<span class="nc" id="L143">         return ResponseEntity.ok(&quot;Finca transferida exitosamente.&quot;);</span>
+<span class="nc" id="L144">     } catch (Exception e) {</span>
+<span class="nc" id="L145">     return ResponseEntity.badRequest().body(&quot;Error al transferir la finca.&quot; + e.getMessage());</span>
+         }   
+       }
+    }
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

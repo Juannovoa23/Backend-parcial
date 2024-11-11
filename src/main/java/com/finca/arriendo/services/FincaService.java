@@ -53,6 +53,7 @@ public class FincaService {
     }
 
     public FincaDto saveNew(FincaDto fincaDto) {
+        //Crear la nueva instancia de Finca
         Finca finca = new Finca();
         
         // Mapear propiedades de FincaDto a Finca
@@ -63,9 +64,19 @@ public class FincaService {
         finca.setCapacidad(fincaDto.getCapacidad());
         finca.setDepartamento(fincaDto.getDepartamento());
         finca.setMunicipio(fincaDto.getMunicipio());
-        finca.setPrecioDefecto(fincaDto.getPrecioDefecto().floatValue());
 
+        //Para asegurar que el precioDefecto no sea null antes de asignarlo
+        if (finca.getPrecioDefecto() == null) {
+            finca.setPrecioDefecto(0.0f);
+        }else{
+            finca.setPrecioDefecto(fincaDto.getPrecioDefecto().floatValue());
+        }
+
+        //Guardar la nueva finca en la database (Asignando el ID de forma automatica)
         finca = fincaRepository.save(finca);
+
+        //Asegurarse de que el ID haya sido asignado correctamente a fincaDto antes de retornarlo
+        fincaDto.setId(finca.getId());
 
         return modelMapper.map(finca, FincaDto.class);
     }

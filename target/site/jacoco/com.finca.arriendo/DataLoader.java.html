@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DataLoader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">arriendo</a> &gt; <a href="index.source.html" class="el_package">com.finca.arriendo</a> &gt; <span class="el_source">DataLoader.java</span></div><h1>DataLoader.java</h1><pre class="source lang-java linenums">package com.finca.arriendo;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+
+import com.finca.arriendo.model.Estado;
+import com.finca.arriendo.model.Finca;
+import com.finca.arriendo.model.Solicitud;
+import com.finca.arriendo.model.Tipo;
+import com.finca.arriendo.model.Usuario;
+import com.finca.arriendo.repository.FincaRepository;
+import com.finca.arriendo.repository.SolicitudRepository;
+import com.finca.arriendo.repository.UsuarioRepository;
+
+
+@Component
+<span class="fc" id="L22">public class DataLoader implements CommandLineRunner {</span>
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private SolicitudRepository solicitudRepository;
+
+    @Autowired
+    private FincaRepository fincaRepository;
+
+    @Override
+    public void run(String... args) throws Exception {
+
+<span class="fc" id="L36">        List&lt;Usuario&gt; usuarios = Arrays.asList(</span>
+        // Crear usuarios de prueba
+<span class="fc" id="L38">            new Usuario(null, Tipo.ARRENDADOR, &quot;John&quot;, &quot;Doe&quot;, &quot;john@example.com&quot;, 123456789, &quot;password1&quot;, 4.5f, null, null, null, false),</span>
+<span class="fc" id="L39">            new Usuario(null, Tipo.ARRENDATARIO, &quot;Jane&quot;, &quot;Smith&quot;, &quot;jane@example.com&quot;, 987654321, &quot;password2&quot;, 5.0f, null, null, null, false),</span>
+<span class="fc" id="L40">            new Usuario(null, Tipo.ARRENDADOR, &quot;Carlos&quot;, &quot;Ramirez&quot;, &quot;carlos@example.com&quot;, 111222333, &quot;password3&quot;, 4.8f, null, null, null, false),</span>
+<span class="fc" id="L41">            new Usuario(null, Tipo.ARRENDATARIO, &quot;Laura&quot;, &quot;Gomez&quot;, &quot;laura@example.com&quot;, 444555666, &quot;password4&quot;, 4.2f, null, null, null, false),</span>
+<span class="fc" id="L42">            new Usuario(null, Tipo.ARRENDADOR, &quot;Pedro&quot;, &quot;Lopez&quot;, &quot;pedro@example.com&quot;, 555666777, &quot;password5&quot;, 3.9f, null, null, null, false),</span>
+<span class="fc" id="L43">            new Usuario(null, Tipo.ARRENDATARIO, &quot;Maria&quot;, &quot;Perez&quot;, &quot;maria@example.com&quot;, 666777888, &quot;password6&quot;, 4.7f, null, null, null, false),</span>
+<span class="fc" id="L44">            new Usuario(null, Tipo.ARRENDADOR, &quot;Luis&quot;, &quot;Martinez&quot;, &quot;luis@example.com&quot;, 777888999, &quot;password7&quot;, 4.0f, null, null, null, false),</span>
+<span class="fc" id="L45">            new Usuario(null, Tipo.ARRENDATARIO, &quot;Elena&quot;, &quot;Torres&quot;, &quot;elena@example.com&quot;, 888999000, &quot;password8&quot;, 4.3f, null, null, null, false),</span>
+<span class="fc" id="L46">            new Usuario(null, Tipo.ARRENDADOR, &quot;Francisco&quot;, &quot;Garcia&quot;, &quot;francisco@example.com&quot;, 999000111, &quot;password9&quot;, 4.1f, null, null, null, false),</span>
+<span class="fc" id="L47">            new Usuario(null, Tipo.ARRENDATARIO, &quot;Clara&quot;, &quot;Castro&quot;, &quot;clara@example.com&quot;, 111000222, &quot;password10&quot;, 4.6f, null, null, null, false),</span>
+<span class="fc" id="L48">            new Usuario(null, Tipo.ARRENDADOR, &quot;Javier&quot;, &quot;Ortega&quot;, &quot;javier@example.com&quot;, 222111333, &quot;password11&quot;, 4.4f, null, null, null, false),</span>
+<span class="fc" id="L49">            new Usuario(null, Tipo.ARRENDATARIO, &quot;Natalia&quot;, &quot;Vega&quot;, &quot;natalia@example.com&quot;, 333222444, &quot;password12&quot;, 4.9f, null, null, null, false),</span>
+<span class="fc" id="L50">            new Usuario(null, Tipo.ARRENDADOR, &quot;Diego&quot;, &quot;Jimenez&quot;, &quot;diego@example.com&quot;, 444333555, &quot;password13&quot;, 3.8f, null, null, null, false),</span>
+<span class="fc" id="L51">            new Usuario(null, Tipo.ARRENDATARIO, &quot;Raul&quot;, &quot;Rivera&quot;, &quot;raul@example.com&quot;, 555444666, &quot;password14&quot;, 4.5f, null, null, null, false),</span>
+<span class="fc" id="L52">            new Usuario(null, Tipo.ARRENDADOR, &quot;Patricia&quot;, &quot;Suarez&quot;, &quot;patricia@example.com&quot;, 666555777, &quot;password15&quot;, 4.2f, null, null, null, false),</span>
+<span class="fc" id="L53">            new Usuario(null, Tipo.ARRENDATARIO, &quot;Felipe&quot;, &quot;Morales&quot;, &quot;felipe@example.com&quot;, 777666888, &quot;password16&quot;, 5.0f, null, null, null, false),</span>
+<span class="fc" id="L54">            new Usuario(null, Tipo.ARRENDADOR, &quot;Sandra&quot;, &quot;Fernandez&quot;, &quot;sandra@example.com&quot;, 888777999, &quot;password17&quot;, 4.3f, null, null, null, false),</span>
+<span class="fc" id="L55">            new Usuario(null, Tipo.ARRENDATARIO, &quot;Fernando&quot;, &quot;Blanco&quot;, &quot;fernando@example.com&quot;, 999888111, &quot;password18&quot;, 4.4f, null, null, null, false),</span>
+<span class="fc" id="L56">            new Usuario(null, Tipo.ARRENDADOR, &quot;Andrea&quot;, &quot;Mejia&quot;, &quot;andrea@example.com&quot;, 111222333, &quot;password19&quot;, 4.7f, null, null, null, false),</span>
+<span class="fc" id="L57">            new Usuario(null, Tipo.ARRENDATARIO, &quot;Manuel&quot;, &quot;Gutierrez&quot;, &quot;manuel@example.com&quot;, 222333444, &quot;password20&quot;, 4.1f, null, null, null, false)</span>
+        );
+        // Guardar los usuarios en la base de datos
+<span class="fc" id="L60">        usuarioRepository.saveAll(usuarios);</span>
+
+        // Crear fincas de prueba
+<span class="fc" id="L63">        List&lt;Finca&gt; fincas = Arrays.asList(</span>
+<span class="fc" id="L64">            new Finca(null, &quot;Finca La Estrella&quot;, &quot;Ubicación 1&quot;, &quot;Medellín&quot;, &quot;Antioquia&quot;, true, 5,</span>
+            &quot;Finca amplia con piscina, rodeada de montañas y naturaleza. Ofrece un espacio tranquilo ideal para descansar y disfrutar en familia. Tiene áreas verdes amplias, zona de BBQ, y acceso cercano a rutas de senderismo.&quot;,
+<span class="fc" id="L66">            10, 1500.0f, null, usuarios.get(0), false),</span>
+<span class="fc" id="L67">        new Finca(null, &quot;Finca El Paraíso&quot;, &quot;Ubicación 2&quot;, &quot;Santa Marta&quot;, &quot;Magdalena&quot;, true, 4,</span>
+            &quot;Finca con vista al mar, ideal para disfrutar de la brisa marina y el paisaje tropical. Cuenta con espacios modernos y cómodos, y ofrece una experiencia única para aquellos que buscan relajarse frente al mar.&quot;,
+<span class="fc" id="L69">            8, 2000.0f, null, usuarios.get(2), false),</span>
+<span class="fc" id="L70">        new Finca(null, &quot;Finca Bella Vista&quot;, &quot;Ubicación 3&quot;, &quot;Cali&quot;, &quot;Valle del Cauca&quot;, true, 5,</span>
+            &quot;Finca rodeada de naturaleza y vegetación exótica, perfecta para aquellos que buscan un ambiente natural. La finca incluye una zona de avistamiento de aves, senderos ecológicos y áreas de descanso al aire libre.&quot;,
+<span class="fc" id="L72">            15, 1800.0f, null, usuarios.get(0), false),</span>
+<span class="fc" id="L73">            new Finca(null, &quot;Finca El Refugio&quot;, &quot;Ubicación 6&quot;, &quot;Villavicencio&quot;, &quot;Meta&quot;, true, 4, </span>
+        &quot;Refugio tranquilo cerca de la selva, ideal para amantes de la naturaleza y el ecoturismo.&quot;, 
+<span class="fc" id="L75">        8, 1800.0f, null, usuarios.get(4), false),</span>
+
+<span class="fc" id="L77">    new Finca(null, &quot;Finca Monte Verde&quot;, &quot;Ubicación 7&quot;, &quot;Pereira&quot;, &quot;Risaralda&quot;, true, 5, </span>
+        &quot;Rodeada de montañas y cafetales, ofrece un ambiente relajante para desconectar.&quot;, 
+<span class="fc" id="L79">        12, 1700.0f, null, usuarios.get(5), false),</span>
+
+<span class="fc" id="L81">    new Finca(null, &quot;Finca El Mirador&quot;, &quot;Ubicación 8&quot;, &quot;Cartagena&quot;, &quot;Bolívar&quot;, true, 3, </span>
+        &quot;Finca con vistas panorámicas a la ciudad y al mar, perfecta para eventos.&quot;, 
+<span class="fc" id="L83">        15, 2200.0f, null, usuarios.get(6), false),</span>
+
+<span class="fc" id="L85">    new Finca(null, &quot;Finca Sol y Luna&quot;, &quot;Ubicación 9&quot;, &quot;Tunja&quot;, &quot;Boyacá&quot;, true, 5, </span>
+        &quot;Finca en una zona montañosa, con acceso a rutas de senderismo y actividades de aventura.&quot;, 
+<span class="fc" id="L87">        10, 1600.0f, null, usuarios.get(7), false),</span>
+
+<span class="fc" id="L89">    new Finca(null, &quot;Finca La Brisa&quot;, &quot;Ubicación 10&quot;, &quot;Neiva&quot;, &quot;Huila&quot;, true, 4, </span>
+        &quot;Finca cerca del río Magdalena, ideal para disfrutar de la brisa y las actividades acuáticas.&quot;, 
+<span class="fc" id="L91">        8, 1400.0f, null, usuarios.get(8), false),</span>
+
+<span class="fc" id="L93">    new Finca(null, &quot;Finca La Aurora&quot;, &quot;Ubicación 11&quot;, &quot;Bucaramanga&quot;, &quot;Santander&quot;, true, 5, </span>
+        &quot;Con vistas a las montañas, esta finca es perfecta para un retiro tranquilo.&quot;, 
+<span class="fc" id="L95">        15, 2100.0f, null, usuarios.get(9), false),</span>
+
+<span class="fc" id="L97">    new Finca(null, &quot;Finca El Encanto Verde&quot;, &quot;Ubicación 12&quot;, &quot;Popayán&quot;, &quot;Cauca&quot;, true, 4, </span>
+        &quot;Finca con jardines exóticos y un entorno natural para el descanso.&quot;, 
+<span class="fc" id="L99">        7, 1350.0f, null, usuarios.get(10), false),</span>
+
+<span class="fc" id="L101">    new Finca(null, &quot;Finca La Pradera&quot;, &quot;Ubicación 13&quot;, &quot;Armenia&quot;, &quot;Quindío&quot;, true, 3, </span>
+        &quot;Finca campestre con amplios jardines y espacio para eventos familiares.&quot;, 
+<span class="fc" id="L103">        20, 1550.0f, null, usuarios.get(11), false),</span>
+
+<span class="fc" id="L105">    new Finca(null, &quot;Finca Buenavista&quot;, &quot;Ubicación 14&quot;, &quot;Montería&quot;, &quot;Córdoba&quot;, true, 4, </span>
+        &quot;Finca con zona de BBQ, ideal para reuniones sociales y celebraciones.&quot;, 
+<span class="fc" id="L107">        10, 1700.0f, null, usuarios.get(12), false),</span>
+
+<span class="fc" id="L109">    new Finca(null, &quot;Finca La Paz&quot;, &quot;Ubicación 15&quot;, &quot;Leticia&quot;, &quot;Amazonas&quot;, true, 5, </span>
+        &quot;Ubicada en el Amazonas, ofrece una experiencia única en contacto con la selva.&quot;, 
+<span class="fc" id="L111">        5, 2500.0f, null, usuarios.get(13), false),</span>
+
+<span class="fc" id="L113">    new Finca(null, &quot;Finca Tierra Bonita&quot;, &quot;Ubicación 16&quot;, &quot;Sincelejo&quot;, &quot;Sucre&quot;, true, 3, </span>
+        &quot;Rodeada de naturaleza tropical, esta finca es ideal para días de descanso.&quot;, 
+<span class="fc" id="L115">        12, 1450.0f, null, usuarios.get(14), false),</span>
+
+<span class="fc" id="L117">    new Finca(null, &quot;Finca El Manantial&quot;, &quot;Ubicación 17&quot;, &quot;Florencia&quot;, &quot;Caquetá&quot;, true, 5, </span>
+        &quot;Finca con acceso a un manantial natural y áreas de descanso al aire libre.&quot;, 
+<span class="fc" id="L119">        8, 1900.0f, null, usuarios.get(15), false),</span>
+
+<span class="fc" id="L121">    new Finca(null, &quot;Finca Vista Hermosa&quot;, &quot;Ubicación 18&quot;, &quot;Quibdó&quot;, &quot;Chocó&quot;, true, 4, </span>
+        &quot;Ubicada en el corazón del Chocó, ofrece una experiencia de conexión con la biodiversidad.&quot;, 
+<span class="fc" id="L123">        15, 1800.0f, null, usuarios.get(16), false),</span>
+
+<span class="fc" id="L125">    new Finca(null, &quot;Finca Los Rosales&quot;, &quot;Ubicación 19&quot;, &quot;Pasto&quot;, &quot;Nariño&quot;, true, 4, </span>
+        &quot;Finca con jardines de rosas y zonas de descanso para disfrutar la tranquilidad del campo.&quot;, 
+<span class="fc" id="L127">        6, 1750.0f, null, usuarios.get(17), false),</span>
+
+<span class="fc" id="L129">    new Finca(null, &quot;Finca Alto Cielo&quot;, &quot;Ubicación 20&quot;, &quot;Riohacha&quot;, &quot;La Guajira&quot;, true, 3, </span>
+        &quot;Finca con vistas al desierto, ideal para explorar la región y descansar en un entorno único.&quot;, 
+<span class="fc" id="L131">        8, 1600.0f, null, usuarios.get(18), false),</span>
+
+<span class="fc" id="L133">    new Finca(null, &quot;Finca Las Margaritas&quot;, &quot;Ubicación 21&quot;, &quot;Arauca&quot;, &quot;Arauca&quot;, true, 5, </span>
+        &quot;Finca con ambiente campestre, ideal para retiros y eventos familiares en contacto con la naturaleza.&quot;, 
+<span class="fc" id="L135">        10, 1650.0f, null, usuarios.get(19), false)</span>
+);
+
+        //Guardar fincas
+<span class="fc" id="L139">        fincaRepository.saveAll(fincas);</span>
+
+        // Crear solicitudes de prueba
+<span class="fc" id="L142">        List&lt;Solicitud&gt; solicitudes = Arrays.asList(</span>
+<span class="fc" id="L143">            new Solicitud(usuarios.get(1), usuarios.get(0), fincas.get(0), new Date(), new Date(), null, null, 1200.0f, 5, false, Estado.EN_TRAMITE),</span>
+<span class="fc" id="L144">            new Solicitud(usuarios.get(3), usuarios.get(2), fincas.get(1), new Date(), new Date(), null, null, 1900.0f, 3, false, Estado.ACEPTADA),</span>
+<span class="fc" id="L145">            new Solicitud(usuarios.get(1), usuarios.get(0), fincas.get(2), new Date(), new Date(), null, null, 1750.0f, 8, false, Estado.CERRADO),</span>
+<span class="fc" id="L146">            new Solicitud(usuarios.get(4), usuarios.get(0), fincas.get(3), new Date(), new Date(), null, null, 1400.0f, 7, false, Estado.VENCIDA),</span>
+<span class="fc" id="L147">            new Solicitud(usuarios.get(2), usuarios.get(3), fincas.get(4), new Date(), new Date(), null, null, 1650.0f, 4, false, Estado.EN_TRAMITE),</span>
+<span class="fc" id="L148">            new Solicitud(usuarios.get(5), usuarios.get(1), fincas.get(5), new Date(), new Date(), null, null, 1550.0f, 6, false, Estado.EN_TRAMITE),</span>
+<span class="fc" id="L149">            new Solicitud(usuarios.get(6), usuarios.get(2), fincas.get(6), new Date(), new Date(), null, null, 2000.0f, 2, false, Estado.ACEPTADA),</span>
+<span class="fc" id="L150">            new Solicitud(usuarios.get(7), usuarios.get(3), fincas.get(7), new Date(), new Date(), null, null, 1100.0f, 9, false, Estado.CERRADO),</span>
+<span class="fc" id="L151">            new Solicitud(usuarios.get(8), usuarios.get(4), fincas.get(8), new Date(), new Date(), null, null, 1700.0f, 10, false, Estado.EN_TRAMITE),</span>
+<span class="fc" id="L152">            new Solicitud(usuarios.get(9), usuarios.get(5), fincas.get(9), new Date(), new Date(), null, null, 1300.0f, 1, false, Estado.VENCIDA),</span>
+<span class="fc" id="L153">            new Solicitud(usuarios.get(1), usuarios.get(6), fincas.get(0), new Date(), new Date(), null, null, 1800.0f, 8, false, Estado.EN_TRAMITE),</span>
+<span class="fc" id="L154">            new Solicitud(usuarios.get(2), usuarios.get(7), fincas.get(1), new Date(), new Date(), null, null, 1600.0f, 4, false, Estado.ACEPTADA),</span>
+<span class="fc" id="L155">            new Solicitud(usuarios.get(3), usuarios.get(8), fincas.get(2), new Date(), new Date(), null, null, 1900.0f, 5, false, Estado.CERRADO),</span>
+<span class="fc" id="L156">            new Solicitud(usuarios.get(4), usuarios.get(9), fincas.get(3), new Date(), new Date(), null, null, 1500.0f, 7, false, Estado.VENCIDA),</span>
+<span class="fc" id="L157">            new Solicitud(usuarios.get(5), usuarios.get(0), fincas.get(4), new Date(), new Date(), null, null, 1200.0f, 3, false, Estado.EN_TRAMITE),</span>
+<span class="fc" id="L158">            new Solicitud(usuarios.get(6), usuarios.get(1), fincas.get(5), new Date(), new Date(), null, null, 1400.0f, 9, false, Estado.ACEPTADA),</span>
+<span class="fc" id="L159">            new Solicitud(usuarios.get(7), usuarios.get(2), fincas.get(6), new Date(), new Date(), null, null, 1800.0f, 2, false, Estado.CERRADO),</span>
+<span class="fc" id="L160">            new Solicitud(usuarios.get(8), usuarios.get(3), fincas.get(7), new Date(), new Date(), null, null, 2000.0f, 6, false, Estado.EN_TRAMITE),</span>
+<span class="fc" id="L161">            new Solicitud(usuarios.get(9), usuarios.get(4), fincas.get(8), new Date(), new Date(), null, null, 1700.0f, 10, false, Estado.VENCIDA)</span>
+               );
+
+<span class="fc" id="L164">        solicitudRepository.saveAll(solicitudes);</span>
+
+<span class="fc" id="L166">        System.out.println(&quot;Datos de prueba creados.&quot;);</span>
+<span class="fc" id="L167">    }</span>
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

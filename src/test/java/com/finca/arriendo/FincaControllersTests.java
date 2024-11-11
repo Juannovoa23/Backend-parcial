@@ -2,32 +2,37 @@ package com.finca.arriendo;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
-
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.finca.arriendo.controllers.FincaController;
 import com.finca.arriendo.dto.FincaDto;
+import com.finca.arriendo.repository.FincaRepository;
 import com.finca.arriendo.services.FincaService;
 
 class FincaControllerTests {
+
 
     @InjectMocks
     private FincaController fincaController;
 
     @Mock
     private FincaService fincaService;
+
+    @Autowired
+    private FincaRepository fincaRepository;
 
     @BeforeEach
     public void setUp() {
@@ -81,11 +86,28 @@ class FincaControllerTests {
 
     @Test
     void testUpdate() throws Exception {
+        //Crear una instancia para Finca y la guardamos en la base de datos para obtener un ID
         FincaDto fincaDto = new FincaDto();
+        fincaDto.setNombre("Finca de Prueba");
+        fincaDto.setUbicacion("Ubicación de prueba");
+        fincaDto.setId(1L); 
 
+        // Configurar el mock para que fincaService.saveNew devuelva fincaDto con el ID asignado
         when(fincaService.saveNew(fincaDto)).thenReturn(fincaDto);
 
+        //Guardar finca en la base de datos para generar el ID de forma automatica
+        fincaDto = fincaService.saveNew(fincaDto);
+
+        // Verificar que tiene un ID asignado 
+        assertNotNull(fincaDto.getId(), "El ID de la finca no debe ser nulo");
+
+        //Configurar el mock con tal de que fincaService.update devuelva el mismo FincaDto
+        when(fincaService.update(fincaDto)).thenReturn(fincaDto);
+
+        //Llamar al metodo update del controlador
         ResponseEntity<FincaDto> result = fincaController.update(fincaDto);
+
+        //Verificar el estado de la respuesta
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals(fincaDto, result.getBody());
     }
@@ -125,5 +147,5 @@ void testCalificarArrendatario() throws Exception {
     
     assertEquals(HttpStatus.OK, result.getStatusCode());
     doNothing().when(fincaService).calificarArrendatario(1L, 4);
-}
+   }
 }

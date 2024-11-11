@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.doNothing;
@@ -40,7 +42,7 @@ class FincaServiceTests {
     @BeforeEach
     public void setUp() {
         finca = new Finca();
-        finca.setId(1);
+        finca.setId(1L);
         finca.setCalificacion(0);
         fincaDto = new FincaDto();
         fincaDto.setId(1L);
@@ -61,7 +63,7 @@ class FincaServiceTests {
         finca.setNombre("Finca A");
         fincaDto.setNombre("Finca A");
 
-        when(fincaRepository.findById(1L)).thenReturn(Optional.of(finca));
+        when(fincaRepository.findByNombre("Finca A")).thenReturn(Optional.of(finca));
         when(modelMapper.map(finca, FincaDto.class)).thenReturn(fincaDto);
 
         FincaDto result = fincaService.get("Finca A");
@@ -71,9 +73,9 @@ class FincaServiceTests {
     @Test
     void testList() {
         Finca finca1 = new Finca();
-        finca1.setId(1);
+        finca1.setId(1L);
         Finca finca2 = new Finca();
-        finca2.setId(2);
+        finca2.setId(2L);
 
         FincaDto fincaDto1 = new FincaDto();
         fincaDto1.setId(1L);
@@ -91,26 +93,58 @@ class FincaServiceTests {
     @Test
     void testSaveNew() {
         fincaDto.setId(1L);
+        fincaDto.setNombre("Finca Prueba");
+        fincaDto.setUbicacion("Ubicación Prueba");
+        fincaDto.setDisponible(true);
+        fincaDto.setCalificacion(5);
+        fincaDto.setCapacidad(10);
+        fincaDto.setDepartamento("Departamento Prueba");
+        fincaDto.setMunicipio("Municipio Prueba");
+        fincaDto.setPrecioDefecto(100.0);
+        // Crear una instancia de Finca con ID asignado
+        Finca finca = new Finca();
+        finca.setId(1L);
+        finca.setNombre("Finca Prueba");
+        finca.setUbicacion("Ubicación Prueba");
+        finca.setDisponible(true);
+        finca.setCalificacion(5);
+        finca.setCapacidad(10);
+        finca.setDepartamento("Departamento Prueba");
+        finca.setMunicipio("Municipio Prueba");
+        finca.setPrecioDefecto(100.0f);
 
-        when(modelMapper.map(fincaDto, Finca.class)).thenReturn(finca);
-        when(fincaRepository.save(finca)).thenReturn(finca);
-        when(modelMapper.map(finca, FincaDto.class)).thenReturn(fincaDto);
+      // Configurar el mock para guardar finca y devolver la instancia con un ID
+      when(fincaRepository.save(any(Finca.class))).thenReturn(finca);
 
-        FincaDto result = fincaService.saveNew(fincaDto);
-        assertEquals(fincaDto, result);
+     // Configurar el mock para mapear cualquier instancia de Finca a fincaDto
+     when(modelMapper.map(any(Finca.class), eq(FincaDto.class))).thenReturn(fincaDto);
+
+     // Llamar al método de servicio
+     FincaDto result = fincaService.saveNew(fincaDto);
+
+     // Verificar que el resultado sea el esperado
+     assertEquals(fincaDto, result);
     }
 
     @Test
-    void testSave() {
+    void testSaveNewWithNullPrecioDefecto() {
         fincaDto.setId(1L);
-
-        when(modelMapper.map(fincaDto, Finca.class)).thenReturn(finca);
-        when(fincaRepository.save(finca)).thenReturn(finca);
-        when(modelMapper.map(finca, FincaDto.class)).thenReturn(fincaDto);
-
+        fincaDto.setPrecioDefecto(null); 
+    
+        // Crear una instancia de Finca con ID asignado y precioDefecto configurado en 0.0f
+        finca.setId(1L);
+        finca.setPrecioDefecto(0.0f); // El servicio asignará este valor cuando el precioDefecto sea null
+    
+        // Configurar el mock para guardar finca y devolver la instancia con un ID
+        when(fincaRepository.save(any(Finca.class))).thenReturn(finca);
+    
+        // Configurar el mock para mapear cualquier instancia de Finca a fincaDto
+        when(modelMapper.map(any(Finca.class), eq(FincaDto.class))).thenReturn(fincaDto);
+    
         FincaDto result = fincaService.saveNew(fincaDto);
         assertEquals(fincaDto, result);
     }
+    
 
     @Test
     void testDelete() {

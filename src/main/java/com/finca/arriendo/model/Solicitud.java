@@ -66,11 +66,12 @@ public class Solicitud {
     @Column(nullable = false)
     private boolean deleted = false;
 
+    @Nullable
     @Column(length = 20)
     private String numeroCuenta; // Para almacenar el número de cuenta
 
     @Column(length = 50)
-    private String banco; // Para almacenar el banco
+    private String banco; // Para almacenar el  nombre del banco
 
     public Solicitud(Usuario arrendatario, Usuario arrendador, Finca finca, Date fechaInicio, Date fechaFin,
                      Integer califFinca, Integer califArrendatario, float precio, int cantPersonas, boolean deleted, Estado estado) {
@@ -84,7 +85,7 @@ public class Solicitud {
         this.precio = precio;
         this.cantPersonas = cantPersonas;
         this.deleted = deleted;
-        this.estado = estado;
+        this.estado = estado; 
     }
 
     public void iniciarPago(float nuevoPrecio, String numeroCuenta, String banco) {
@@ -113,6 +114,9 @@ public class Solicitud {
 
     public void setId(Long id) {
         this.id = id;
+    }
+    public Long getId() {
+        return id;
     }
 
     public void setArrendatario(Usuario arrendatario) {
@@ -196,5 +200,6 @@ public class Solicitud {
     public Estado getEstado() {
         return this.estado;
     }
+    
     
 }

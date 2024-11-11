@@ -31,7 +31,7 @@ public class FincaTests {
         arrendador.setDeleted(false);
 
         finca = new Finca();
-        finca.setId(1);
+        finca.setId(1L);
         finca.setDueño(arrendador); 
         finca.setNombre("Finca del Valle");
         finca.setUbicacion("Calle 123");

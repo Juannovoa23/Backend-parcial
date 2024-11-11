@@ -10,6 +10,7 @@ import com.finca.arriendo.dto.SolicitudDto;
 import com.finca.arriendo.dto.UsuarioDto;
 import com.finca.arriendo.model.Finca;
 import com.finca.arriendo.model.Solicitud;
+import com.finca.arriendo.model.Tipo;
 import com.finca.arriendo.model.Usuario;
 
 @Configuration
@@ -29,7 +30,7 @@ public class ModelMapperConfiguration {
             mapping.map(Usuario::getTelefono, UsuarioDto::setTelefono);
             mapping.map(Usuario::getContrasena, UsuarioDto::setContrasena);
             mapping.map(Usuario::getCalificacion, UsuarioDto::setCalificacion);
-            mapping.map(Usuario::getTipo, UsuarioDto::setTipo);
+            mapping.map(src -> src.getTipo() != null ? src.getTipo().name() : "DESCONOCIDO", UsuarioDto::setTipo);
         });
 
         modelMapper.createTypeMap(UsuarioDto.class, Usuario.class).addMappings(mapping -> {
@@ -40,7 +41,7 @@ public class ModelMapperConfiguration {
             mapping.map(UsuarioDto::getTelefono, Usuario::setTelefono);
             mapping.map(UsuarioDto::getContrasena, Usuario::setContrasena);
             mapping.map(UsuarioDto::getCalificacion, Usuario::setCalificacion);
-            mapping.map(UsuarioDto::getTipo, Usuario::setTipo);
+            mapping.map(dto -> dto.getTipo() != null ? Tipo.valueOf(dto.getTipo()) : Tipo.ARRENDATARIO, Usuario::setTipo);
         });
 
         // Mapeo para Solicitud y SolicitudDto

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SolicitudService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">arriendo</a> &gt; <a href="index.source.html" class="el_package">com.finca.arriendo.services</a> &gt; <span class="el_source">SolicitudService.java</span></div><h1>SolicitudService.java</h1><pre class="source lang-java linenums">package com.finca.arriendo.services;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
+
+import com.finca.arriendo.dto.SolicitudDto;
+import com.finca.arriendo.model.Solicitud;
+import com.finca.arriendo.repository.SolicitudRepository;
+
+@Service
+public class SolicitudService {
+
+    // Crear una instancia de ModelMapper
+<span class="fc" id="L18">    private ModelMapper modelMapper = new ModelMapper();</span>
+
+    private final SolicitudRepository solicitudRepository;
+
+<span class="fc" id="L22">    public SolicitudService(SolicitudRepository solicitudRepository) {</span>
+<span class="fc" id="L23">        this.solicitudRepository = solicitudRepository;</span>
+<span class="fc" id="L24">    }</span>
+
+    // Crear una nueva solicitud
+    public SolicitudDto crearSolicitud(SolicitudDto solicitudDto) {
+        //Crear la entidad a partir del DTO
+<span class="fc" id="L29">        Solicitud solicitud = modelMapper.map(solicitudDto, Solicitud.class);</span>
+
+        //Guardar la solicitud en el repositorio
+<span class="fc" id="L32">        Solicitud nuevaSolicitud = solicitudRepository.save(solicitud);</span>
+
+        //Mapear la entidad guardada de vuelta al DTO
+<span class="fc" id="L35">        return modelMapper.map(nuevaSolicitud, SolicitudDto.class);</span>
+
+    }
+
+    // Obtener todas las solicitudes
+    public List&lt;SolicitudDto&gt; obtenerTodasLasSolicitudes() {
+<span class="fc" id="L41">        List&lt;Solicitud&gt; solicitudes = solicitudRepository.findAll();</span>
+<span class="fc" id="L42">        return solicitudes.stream().map(this::mapToDto).collect(Collectors.toList());</span>
+    }
+
+    // Obtener solicitud por ID
+    public Optional&lt;SolicitudDto&gt; obtenerSolicitudPorId(Long id) {
+<span class="fc" id="L47">        return solicitudRepository.findById(id).map(this::mapToDto);</span>
+    }
+
+    // Actualizar solicitud
+    public Optional&lt;SolicitudDto&gt; actualizarSolicitud(Long id, SolicitudDto solicitudDto) {
+<span class="fc" id="L52">        Optional&lt;Solicitud&gt; optionalSolicitud = solicitudRepository.findById(id);</span>
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">        if (optionalSolicitud.isPresent()) {</span>
+<span class="fc" id="L54">            Solicitud solicitud = optionalSolicitud.get();</span>
+<span class="fc" id="L55">            mapToEntity(solicitudDto, solicitud);</span>
+<span class="fc" id="L56">            Solicitud updatedSolicitud = solicitudRepository.save(solicitud);</span>
+<span class="fc" id="L57">            return Optional.of(mapToDto(updatedSolicitud));</span>
+        }
+<span class="nc" id="L59">        return Optional.empty();</span>
+    }
+
+    // Eliminar solicitud
+    public boolean eliminarSolicitud(Long id) {
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        if (solicitudRepository.existsById(id)) {</span>
+<span class="fc" id="L65">            solicitudRepository.deleteById(id);</span>
+<span class="fc" id="L66">            return true;</span>
+        }
+<span class="nc" id="L68">        return false;</span>
+    }
+
+    // Calificar arrendatario
+    public Optional&lt;SolicitudDto&gt; calificarArrendatario(Long id, int calificacion) {
+<span class="fc" id="L73">        Optional&lt;Solicitud&gt; optionalSolicitud = solicitudRepository.findById(id);</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        if (optionalSolicitud.isPresent()) {</span>
+<span class="fc" id="L75">            Solicitud solicitud = optionalSolicitud.get();</span>
+<span class="fc" id="L76">            solicitud.setCalifArrendatario(calificacion);</span>
+<span class="fc" id="L77">            Solicitud updatedSolicitud = solicitudRepository.save(solicitud);</span>
+<span class="fc" id="L78">            return Optional.of(mapToDto(updatedSolicitud));</span>
+        }
+<span class="nc" id="L80">        return Optional.empty();</span>
+    }
+
+    // Calificar finca
+    public Optional&lt;SolicitudDto&gt; calificarFinca(Long id, int calificacion) {
+<span class="fc" id="L85">        Optional&lt;Solicitud&gt; optionalSolicitud = solicitudRepository.findById(id);</span>
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">        if (optionalSolicitud.isPresent()) {</span>
+<span class="fc" id="L87">            Solicitud solicitud = optionalSolicitud.get();</span>
+<span class="fc" id="L88">            solicitud.setCalifFinca(calificacion);</span>
+<span class="fc" id="L89">            Solicitud updatedSolicitud = solicitudRepository.save(solicitud);</span>
+<span class="fc" id="L90">            return Optional.of(mapToDto(updatedSolicitud));</span>
+        }
+<span class="nc" id="L92">        return Optional.empty();</span>
+    }
+
+    // Métodos privados para mapear entre DTO y entidad
+    private SolicitudDto mapToDto(Solicitud solicitud) {
+        // Verificar si la solicitud es nula para evitar NullPointerException
+<span class="pc bpc" id="L98" title="1 of 2 branches missed.">        if (solicitud == null) {</span>
+<span class="nc" id="L99">        return null; // O puedes lanzar una excepción dependiendo de tu lógica</span>
+        }
+
+
+        // Crear el DTO y mapear los campos
+<span class="fc" id="L104">        SolicitudDto dto = new SolicitudDto();</span>
+        
+        //Mapear visibilidad del pago y calificación segun el estado
+<span class="fc" id="L107">        dto.setId(solicitud.getId());</span>
+<span class="fc" id="L108">        dto.setEstado(solicitud.getEstado());</span>
+<span class="fc" id="L109">        dto.setFechaInicio(solicitud.getFechaInicio());</span>
+<span class="fc" id="L110">        dto.setFechaFin(solicitud.getFechaFin());</span>
+<span class="fc" id="L111">        dto.setCalifFinca(solicitud.getCalifFinca());</span>
+<span class="fc" id="L112">        dto.setCalifArrendatario(solicitud.getCalifArrendatario());</span>
+<span class="fc" id="L113">        dto.setPrecio(solicitud.getPrecio());</span>
+<span class="fc" id="L114">        dto.setCantPersonas(solicitud.getCantPersonas());</span>
+<span class="fc" id="L115">        dto.setNumeroCuenta(solicitud.getNumeroCuenta());</span>
+<span class="fc" id="L116">        dto.setBanco(solicitud.getBanco());</span>
+
+        // Mapear visibilidad del pago y calificación según el estado
+<span class="fc" id="L119">        dto.setPagoVisible(solicitud.isPagoVisible());</span>
+<span class="fc" id="L120">        dto.setCalificacionVisible(solicitud.isCalificacionVisible());</span>
+
+<span class="fc" id="L122">        return dto;</span>
+    }
+
+    private void mapToEntity(SolicitudDto solicitudDto, Solicitud solicitud) {
+<span class="pc bpc" id="L126" title="2 of 4 branches missed.">        if (solicitudDto == null || solicitud == null) {</span>
+<span class="nc" id="L127">            throw new IllegalArgumentException(&quot;SolicitudDto o Solicitud no pueden ser null&quot;);</span>
+        }
+<span class="fc" id="L129">        solicitud.setFechaInicio(solicitudDto.getFechaInicio());</span>
+<span class="fc" id="L130">        solicitud.setFechaFin(solicitudDto.getFechaFin());</span>
+<span class="fc" id="L131">        solicitud.setCalifFinca(solicitudDto.getCalifFinca());</span>
+<span class="fc" id="L132">        solicitud.setCalifArrendatario(solicitudDto.getCalifArrendatario());</span>
+<span class="fc" id="L133">        solicitud.setPrecio(solicitudDto.getPrecio());</span>
+<span class="fc" id="L134">        solicitud.setCantPersonas(solicitudDto.getCantPersonas());</span>
+<span class="fc" id="L135">        solicitud.setNumeroCuenta(solicitudDto.getNumeroCuenta());</span>
+<span class="fc" id="L136">        solicitud.setBanco(solicitudDto.getBanco());</span>
+<span class="fc" id="L137">    }</span>
+
+    public List&lt;SolicitudDto&gt; findByArrendatarioId(Long id) {
+<span class="nc" id="L140">        List&lt;Solicitud&gt; solicitudes = solicitudRepository.findByArrendatarioId(id);</span>
+<span class="nc" id="L141">        return solicitudes.stream()</span>
+<span class="nc" id="L142">                .map(this::mapToDto)</span>
+<span class="nc" id="L143">                .collect(Collectors.toList());</span>
+    }
+
+    public Optional&lt;SolicitudDto&gt; calificar(Long id, SolicitudDto calificacionDto) {
+<span class="nc" id="L147">        Solicitud solicitud = solicitudRepository.findById(id)</span>
+<span class="nc" id="L148">        .orElseThrow(() -&gt; {</span>
+<span class="nc" id="L149">            throw new ResourceNotFoundException(&quot;No se encontró la solicitud con el ID: &quot; + id);</span>
+        });
+
+<span class="nc" id="L152">        solicitud.setCalifFinca(calificacionDto.getCalifFinca());</span>
+<span class="nc" id="L153">        solicitud.setCalifArrendatario(calificacionDto.getCalifArrendatario());</span>
+<span class="nc" id="L154">        Solicitud solicitudActualizada = solicitudRepository.save(solicitud);</span>
+<span class="nc" id="L155">        return Optional.of(mapToDto(solicitudActualizada));</span>
+    }
+
+    public class ResourceNotFoundException extends RuntimeException {
+<span class="nc" id="L159">        public ResourceNotFoundException(String message) {</span>
+<span class="nc" id="L160">            super(message);</span>
+<span class="nc" id="L161">        }</span>
+    }
+
+    public Optional&lt;SolicitudDto&gt; realizarPago(Long id, String numeroCuenta, String banco) {
+<span class="fc" id="L165">        Optional&lt;Solicitud&gt; optionalSolicitud = solicitudRepository.findById(id);</span>
+        
+<span class="pc bpc" id="L167" title="1 of 2 branches missed.">        if (optionalSolicitud.isPresent()) {</span>
+<span class="fc" id="L168">            Solicitud solicitud = optionalSolicitud.get();</span>
+            // Actualizar solo los detalles de pago
+<span class="fc" id="L170">            solicitud.setNumeroCuenta(numeroCuenta); </span>
+<span class="fc" id="L171">            solicitud.setBanco(banco);</span>
+            
+            // Guardar la solicitud con los nuevos detalles de pago
+<span class="fc" id="L174">            Solicitud updatedSolicitud = solicitudRepository.save(solicitud);</span>
+<span class="fc" id="L175">            return Optional.of(mapToDto(updatedSolicitud)); </span>
+        }
+<span class="nc" id="L177">        return Optional.empty(); </span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

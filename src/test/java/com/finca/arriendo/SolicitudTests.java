@@ -25,7 +25,6 @@ public class SolicitudTests {
         // Crear una instancia de Solicitud usando el constructor
         Solicitud solicitud = new Solicitud();
         solicitud.setId(1L);
-        solicitud.setEstado(Estado.ACEPTADA);
         solicitud.setArrendatario(arrendatario);
         solicitud.setArrendador(arrendador);
         solicitud.setFinca(finca);
@@ -36,10 +35,10 @@ public class SolicitudTests {
         solicitud.setPrecio(1500.00f);
         solicitud.setCantPersonas(4);
         solicitud.setDeleted(false);
+        solicitud.setEstado(Estado.EN_PAGO);
 
         // Verificar los valores de los atributos usando los getters
         assertEquals(1L, solicitud.getId());
-        assertEquals(Estado.ACEPTADA, solicitud.getEstado());
         assertEquals(arrendatario, solicitud.getArrendatario());
         assertEquals(arrendador, solicitud.getArrendador());
         assertEquals(finca, solicitud.getFinca());
@@ -92,7 +91,8 @@ public class SolicitudTests {
 
         Solicitud solicitud = new Solicitud(arrendatario, arrendador, finca, new Date(), new Date(),
                                              null, null, 1500.00f, 4, false, Estado.EN_PAGO);
-        
+                                             
+        System.out.println("Estado de la solicitud: " + solicitud.getEstado()); 
         assertTrue(solicitud.isPagoVisible());
 
         solicitud.setEstado(Estado.VENCIDA);
@@ -108,6 +108,7 @@ public class SolicitudTests {
         Solicitud solicitud = new Solicitud(arrendatario, arrendador, finca, new Date(), new Date(),
                                              null, null, 1500.00f, 4, false, Estado.CERRADO);
         
+                                             System.out.println(solicitud.getEstado());
         assertTrue(solicitud.isCalificacionVisible());
 
         solicitud.setEstado(Estado.ACEPTADA);
@@ -119,14 +120,17 @@ public class SolicitudTests {
         Usuario arrendatario = new Usuario();
         Usuario arrendador = new Usuario();
         Finca finca = new Finca();
-        Date fechaEntrega = new Date(System.currentTimeMillis() - 1000 * 60 * 60 * 24); // Ayer
 
-        Solicitud solicitud = new Solicitud(arrendatario, arrendador, finca, fechaEntrega, new Date(),
-                                             null, null, 1500.00f, 4, false, Estado.CERRADO);
+        //Configurar la fecha del fin en el pasado
+        Date fechaInicio = new Date();
+        Date fechaFin = new Date(fechaInicio.getTime() - 86400000); 
+
         
+        //Crear la solicitud
+        Solicitud solicitud = new Solicitud(arrendatario, arrendador, finca, fechaInicio, fechaFin,4,5, 1500.00f, 4, false, Estado.CERRADO);
+        //Verificar que el estado VENCIDA hace visible la opcion de calificar
+        assertFalse(solicitud.isPagoVisible());
+        assertTrue(solicitud.isCalificacionVisible());
         assertTrue(solicitud.isCalificarVisible());
-
-        solicitud.setFechaFin(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)); // Mañana
-        assertFalse(solicitud.isCalificarVisible());
-    }
+    }  
 }

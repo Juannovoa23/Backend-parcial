@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Solicitud.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">arriendo</a> &gt; <a href="index.source.html" class="el_package">com.finca.arriendo.model</a> &gt; <span class="el_source">Solicitud.java</span></div><h1>Solicitud.java</h1><pre class="source lang-java linenums">package com.finca.arriendo.model;
+
+import java.util.Date;
+
+import io.micrometer.common.lang.Nullable;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+
+public class Solicitud {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Enumerated(EnumType.STRING)
+    private Estado estado;
+
+    @ManyToOne
+    @JoinColumn(name = &quot;arrendatario_id&quot;, nullable = false)
+    private Usuario arrendatario;
+
+    @ManyToOne
+    @JoinColumn(name = &quot;arrendador_id&quot;, nullable = false) 
+    private Usuario arrendador;
+
+    @ManyToOne
+    @JoinColumn(name = &quot;finca_id&quot;, nullable = false)
+    private Finca finca;
+
+    @Column(nullable = false)
+    private Date fechaInicio;
+
+    @Column(nullable = false) 
+    private Date fechaFin;
+
+
+    @Nullable
+    @Column
+    private Integer califFinca; // Cambiado a Integer para manejar valores nulos
+
+    @Nullable
+    @Column
+    private Integer califArrendatario; // Cambiado a Integer para manejar valores nulos
+
+    @Column(nullable = false) 
+    private float precio;
+
+    @Column(nullable = false)
+    private int cantPersonas;
+
+<span class="fc" id="L66">    @Column(nullable = false)</span>
+    private boolean deleted = false;
+
+    @Nullable
+    @Column(length = 20)
+    private String numeroCuenta; // Para almacenar el número de cuenta
+
+    @Column(length = 50)
+    private String banco; // Para almacenar el  nombre del banco
+
+    public Solicitud(Usuario arrendatario, Usuario arrendador, Finca finca, Date fechaInicio, Date fechaFin,
+<span class="fc" id="L77">                     Integer califFinca, Integer califArrendatario, float precio, int cantPersonas, boolean deleted, Estado estado) {</span>
+<span class="fc" id="L78">        this.arrendatario = arrendatario;</span>
+<span class="fc" id="L79">        this.arrendador = arrendador;</span>
+<span class="fc" id="L80">        this.finca = finca;</span>
+<span class="fc" id="L81">        this.fechaInicio = fechaInicio;</span>
+<span class="fc" id="L82">        this.fechaFin = fechaFin;</span>
+<span class="fc" id="L83">        this.califFinca = califFinca;</span>
+<span class="fc" id="L84">        this.califArrendatario = califArrendatario;</span>
+<span class="fc" id="L85">        this.precio = precio;</span>
+<span class="fc" id="L86">        this.cantPersonas = cantPersonas;</span>
+<span class="fc" id="L87">        this.deleted = deleted;</span>
+<span class="fc" id="L88">        this.estado = estado; </span>
+<span class="fc" id="L89">    }</span>
+
+    public void iniciarPago(float nuevoPrecio, String numeroCuenta, String banco) {
+<span class="pc bpc" id="L92" title="1 of 4 branches missed.">        if (this.estado == Estado.EN_PAGO &amp;&amp; !this.estado.equals(Estado.VENCIDA)) {</span>
+<span class="fc" id="L93">            this.precio = nuevoPrecio; // Actualizar precio</span>
+<span class="fc" id="L94">            this.numeroCuenta = numeroCuenta; // Actualizar número de cuenta</span>
+<span class="fc" id="L95">            this.banco = banco; // Actualizar banco</span>
+        }
+<span class="fc" id="L97">    }</span>
+
+    public void setEstado(Estado estado) {
+<span class="fc" id="L100">        this.estado = estado;</span>
+<span class="fc" id="L101">    }</span>
+
+    public boolean isPagoVisible() {
+<span class="pc bpc" id="L104" title="1 of 4 branches missed.">        return this.estado == Estado.EN_PAGO &amp;&amp; !this.estado.equals(Estado.VENCIDA);</span>
+    }
+
+    public boolean isCalificacionVisible() {
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        return this.estado == Estado.CERRADO; // Ejemplo de lógica para calificación</span>
+    }
+
+    public boolean isCalificarVisible() {
+<span class="pc bpc" id="L112" title="2 of 4 branches missed.">        return this.estado == Estado.CERRADO &amp;&amp; this.fechaFin.before(new Date());</span>
+    }
+
+    public void setId(Long id) {
+<span class="fc" id="L116">        this.id = id;</span>
+<span class="fc" id="L117">    }</span>
+    public Long getId() {
+<span class="fc" id="L119">        return id;</span>
+    }
+
+    public void setArrendatario(Usuario arrendatario) {
+<span class="fc" id="L123">        this.arrendatario = arrendatario;</span>
+<span class="fc" id="L124">    }</span>
+    
+    public void setArrendador(Usuario arrendador) {
+<span class="fc" id="L127">        this.arrendador = arrendador;</span>
+<span class="fc" id="L128">    }</span>
+    
+    public void setFinca(Finca finca) {
+<span class="fc" id="L131">        this.finca = finca;</span>
+<span class="fc" id="L132">    }</span>
+
+    public Date getFechaInicio() {
+<span class="fc" id="L135">        return fechaInicio;</span>
+    }
+    
+    public void setFechaInicio(Date fechaInicio) {
+<span class="fc" id="L139">        this.fechaInicio = fechaInicio;</span>
+<span class="fc" id="L140">    }</span>
+    
+    public Date getFechaFin() {
+<span class="fc" id="L143">        return fechaFin;</span>
+    }
+    
+    public void setFechaFin(Date fechaFin) {
+<span class="fc" id="L147">        this.fechaFin = fechaFin;</span>
+<span class="fc" id="L148">    }</span>
+    
+
+
+    public void setCalifFinca(Integer califFinca) {
+<span class="fc" id="L153">        this.califFinca = califFinca;</span>
+<span class="fc" id="L154">    }</span>
+    
+    public void setCalifArrendatario(Integer califArrendatario) {
+<span class="fc" id="L157">        this.califArrendatario = califArrendatario;</span>
+<span class="fc" id="L158">    }</span>
+    
+    public void setPrecio(float precio) {
+<span class="fc" id="L161">        this.precio = precio;</span>
+<span class="fc" id="L162">    }</span>
+    
+    public void setCantPersonas(int cantPersonas) {
+<span class="fc" id="L165">        this.cantPersonas = cantPersonas;</span>
+<span class="fc" id="L166">    }</span>
+    
+    public void setDeleted(boolean deleted) {
+<span class="fc" id="L169">        this.deleted = deleted;</span>
+<span class="fc" id="L170">    }</span>
+
+    public Integer getCalifArrendatario() {
+<span class="fc" id="L173">        return this.califArrendatario;</span>
+    }
+
+    public void calificarArrendatario(int calificacion) {
+<span class="nc" id="L177">        this.califArrendatario = calificacion;</span>
+<span class="nc" id="L178">    }</span>
+
+    public void setNumeroCuenta(String numeroCuenta) {
+<span class="fc" id="L181">        this.numeroCuenta = numeroCuenta;</span>
+<span class="fc" id="L182">    }</span>
+
+    public String getNumeroCuenta() {
+<span class="fc" id="L185">        return numeroCuenta;</span>
+    }
+
+    public void setBanco(String banco) {
+<span class="fc" id="L189">        this.banco = banco;</span>
+<span class="fc" id="L190">    }</span>
+
+    public String getBanco() {
+<span class="fc" id="L193">        return banco;</span>
+    }
+
+    public Integer getCalifFinca() {
+<span class="fc" id="L197">        return this.califFinca;</span>
+    }
+
+    public Estado getEstado() {
+<span class="fc" id="L201">        return this.estado;</span>
+    }
+    
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

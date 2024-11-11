@@ -24,7 +24,7 @@ public class Finca {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id; // id de la finca
+    private Long id; // id de la finca
     private String nombre; // Nombre de la finca
     private String ubicacion; // Identificador de ubicación
     private String municipio; // Municipio de la finca
@@ -54,8 +54,12 @@ public class Finca {
         }
     }
 
-    public Integer getId() {
+    public Long getId() {
         return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     // Método para verificar disponibilidad
@@ -79,6 +83,14 @@ public class Finca {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public Float getPrecioDefecto(){
+        return this.precioDefecto;
+    }
+
+    public void setPrecioDefecto(Float precioDefecto) {
+        this.precioDefecto=precioDefecto;
     }
 
     public void setUbicacion(String ubicacion) {

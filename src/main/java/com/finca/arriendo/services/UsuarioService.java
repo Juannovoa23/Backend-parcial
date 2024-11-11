@@ -15,7 +15,6 @@ import com.finca.arriendo.dto.UsuarioDto;
 import com.finca.arriendo.model.Estado;
 import com.finca.arriendo.model.Finca;
 import com.finca.arriendo.model.Solicitud;
-import com.finca.arriendo.model.Tipo;
 import com.finca.arriendo.model.Usuario;
 import com.finca.arriendo.repository.FincaRepository;
 import com.finca.arriendo.repository.SolicitudRepository;
@@ -99,10 +98,8 @@ public class UsuarioService {
     // Creación de cuenta 
     @Transactional
     public UsuarioDto registrarUsuario(UsuarioDto usuarioDto) {
-        Usuario usuario = new Usuario();
-        usuario.registrarUsuario(usuarioDto.getNombre(), usuarioDto.getApellido(), usuarioDto.getCorreo(), usuarioDto.getContrasena(), usuarioDto.getTelefono(), Tipo.ARRENDATARIO);
-        usuario.validar();  // Validaciones del modelo Usuario
-        usuarioRepository.save(usuario);
+        Usuario usuario = modelMapper.map(usuarioDto, Usuario.class);
+        usuario = usuarioRepository.save(usuario);
         return modelMapper.map(usuario, UsuarioDto.class);
     }
 
@@ -160,7 +157,7 @@ public class UsuarioService {
                     System.out.println("Error al parsear la fecha de inicio: " + e.getMessage());
                 }
                 solicitud.setCantPersonas(cantidadPersonas);
-                solicitud.setEstado(Estado.valueOf("Pendiente"));
+                solicitud.setEstado(Estado.valueOf("EN_TRAMITE"));
 
                 solicitudRepository.save(solicitud);  // Guarda la solicitud
                 return true;
@@ -173,16 +170,17 @@ public class UsuarioService {
     public boolean pagarArriendo(Long solicitudId) {
         // Busca la solicitud por su ID
         Optional<Solicitud> solicitudOpt = solicitudRepository.findById(solicitudId);
-        if (solicitudOpt.isPresent()) {
-            Solicitud solicitud = solicitudOpt.get();
-
-            // Verifica si el arriendo puede ser pagado (validaciones adicionales pueden ser necesarias)
-            if (solicitud.getEstado().toString().equals("Pagado")) {
-                solicitud.setEstado(Estado.valueOf("Pagado")); // Cambia el estado a "Pagado"
-                solicitudRepository.save(solicitud);  // Guarda la actualización
-                return true;
-            }
+    
+    if (solicitudOpt.isPresent()) {
+        Solicitud solicitud = solicitudOpt.get();
+        
+        // Cambiar el estado a EN_PAGO si es aplicable
+        if (solicitud.getEstado() == Estado.EN_TRAMITE) {
+            solicitud.setEstado(Estado.EN_PAGO);
+            solicitudRepository.save(solicitud);
+            return true;
         }
-        return false;  // Si no se encuentra la solicitud o no puede ser pagada
+    }
+    return false; 
     }
 }

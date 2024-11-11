@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FincaService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">arriendo</a> &gt; <a href="index.source.html" class="el_package">com.finca.arriendo.services</a> &gt; <span class="el_source">FincaService.java</span></div><h1>FincaService.java</h1><pre class="source lang-java linenums">package com.finca.arriendo.services;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.finca.arriendo.dto.FincaDto;
+import com.finca.arriendo.model.Estado;
+import com.finca.arriendo.model.Finca;
+import com.finca.arriendo.model.Solicitud;
+import com.finca.arriendo.model.Tipo;
+import com.finca.arriendo.model.Usuario;
+import com.finca.arriendo.repository.FincaRepository;
+import com.finca.arriendo.repository.SolicitudRepository; 
+import com.finca.arriendo.repository.UsuarioRepository;
+
+@Service
+<span class="fc" id="L21">public class FincaService {</span>
+
+    @Autowired
+    FincaRepository fincaRepository;
+
+    @Autowired
+    SolicitudRepository solicitudRepository; 
+    
+    @Autowired
+    UsuarioRepository usuarioRepository;
+
+    @Autowired
+    ModelMapper modelMapper;
+
+    public FincaDto get(Long id) {
+<span class="fc" id="L36">        Optional&lt;Finca&gt; finca = fincaRepository.findById(id);</span>
+<span class="fc" id="L37">        return finca.map(value -&gt; modelMapper.map(value, FincaDto.class)).orElse(null);</span>
+    }
+
+    public FincaDto get(String nombre) {
+<span class="fc" id="L41">        Optional&lt;Finca&gt; fincaOpt = fincaRepository.findByNombre(nombre);</span>
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">        if (fincaOpt.isPresent()) {</span>
+<span class="fc" id="L43">            return modelMapper.map(fincaOpt.get(), FincaDto.class);</span>
+        }
+<span class="nc" id="L45">        return null;</span>
+    }
+    
+
+    public List&lt;FincaDto&gt; list() {
+<span class="fc" id="L50">        return fincaRepository.findAll().stream()</span>
+<span class="fc" id="L51">                .map(finca -&gt; modelMapper.map(finca, FincaDto.class))</span>
+<span class="fc" id="L52">                .collect(Collectors.toList());</span>
+    }
+
+    public FincaDto saveNew(FincaDto fincaDto) {
+        //Crear la nueva instancia de Finca
+<span class="fc" id="L57">        Finca finca = new Finca();</span>
+        
+        // Mapear propiedades de FincaDto a Finca
+<span class="fc" id="L60">        finca.setNombre(fincaDto.getNombre());</span>
+<span class="fc" id="L61">        finca.setUbicacion(fincaDto.getUbicacion());</span>
+<span class="fc" id="L62">        finca.setDisponible(fincaDto.getDisponible());</span>
+<span class="fc" id="L63">        finca.setCalificacion(fincaDto.getCalificacion());</span>
+<span class="fc" id="L64">        finca.setCapacidad(fincaDto.getCapacidad());</span>
+<span class="fc" id="L65">        finca.setDepartamento(fincaDto.getDepartamento());</span>
+<span class="fc" id="L66">        finca.setMunicipio(fincaDto.getMunicipio());</span>
+
+        //Para asegurar que el precioDefecto no sea null antes de asignarlo
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">        if (finca.getPrecioDefecto() == null) {</span>
+<span class="fc" id="L70">            finca.setPrecioDefecto(0.0f);</span>
+        }else{
+<span class="nc" id="L72">            finca.setPrecioDefecto(fincaDto.getPrecioDefecto().floatValue());</span>
+        }
+
+        //Guardar la nueva finca en la database (Asignando el ID de forma automatica)
+<span class="fc" id="L76">        finca = fincaRepository.save(finca);</span>
+
+        //Asegurarse de que el ID haya sido asignado correctamente a fincaDto antes de retornarlo
+<span class="fc" id="L79">        fincaDto.setId(finca.getId());</span>
+
+<span class="fc" id="L81">        return modelMapper.map(finca, FincaDto.class);</span>
+    }
+
+
+    public FincaDto update(FincaDto fincaDto) {
+<span class="nc" id="L86">        Finca finca = fincaRepository.findById(fincaDto.getId())</span>
+<span class="nc" id="L87">            .orElseThrow(() -&gt; new RuntimeException(&quot;Finca no encontrada&quot;));</span>
+
+        // Mapear propiedades de FincaDto a Finca para actualización
+<span class="nc" id="L90">        finca.setNombre(fincaDto.getNombre());</span>
+<span class="nc" id="L91">        finca.setUbicacion(fincaDto.getUbicacion());</span>
+<span class="nc" id="L92">        finca.setDisponible(fincaDto.getDisponible());</span>
+<span class="nc" id="L93">        finca.setCalificacion(fincaDto.getCalificacion());</span>
+<span class="nc" id="L94">        finca.setCapacidad(fincaDto.getCapacidad());</span>
+<span class="nc" id="L95">        finca.setDepartamento(fincaDto.getDepartamento());</span>
+<span class="nc" id="L96">        finca.setMunicipio(fincaDto.getMunicipio());</span>
+<span class="nc" id="L97">        finca.setPrecioDefecto(fincaDto.getPrecioDefecto().floatValue());</span>
+
+<span class="nc" id="L99">        finca = fincaRepository.save(finca);</span>
+
+<span class="nc" id="L101">        return modelMapper.map(finca, FincaDto.class);</span>
+    }
+
+    public void delete(FincaDto fincaDto) {
+<span class="fc" id="L105">        Finca finca = modelMapper.map(fincaDto, Finca.class);</span>
+<span class="fc" id="L106">        fincaRepository.delete(finca);</span>
+<span class="fc" id="L107">    }</span>
+
+    //Función para calificar el arrendatario
+    public void calificarArrendatario(Long solicitudId, int calificacion) {
+<span class="nc" id="L111">    Optional&lt;Solicitud&gt; solicitudOptional = solicitudRepository.findById(solicitudId);</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">    if (solicitudOptional.isPresent()) {</span>
+<span class="nc" id="L113">        Solicitud solicitud = solicitudOptional.get();</span>
+<span class="nc" id="L114">        solicitud.calificarArrendatario(calificacion); </span>
+<span class="nc" id="L115">        solicitudRepository.save(solicitud);</span>
+<span class="nc" id="L116">        verificarCalificaciones(solicitud); </span>
+    }
+<span class="nc" id="L118">}</span>
+
+private void verificarCalificaciones(Solicitud solicitud) {
+<span class="nc bnc" id="L121" title="All 4 branches missed.">    if (solicitud.getCalifFinca() != null &amp;&amp; solicitud.getCalifArrendatario() != null) {</span>
+<span class="nc" id="L122">        solicitud.setEstado(Estado.CERRADO); </span>
+<span class="nc" id="L123">        solicitudRepository.save(solicitud);</span>
+    }
+<span class="nc" id="L125">}</span>
+
+    public FincaDto calificarFinca(Long fincaId, int calificacion) {
+<span class="fc" id="L128">        Optional&lt;Finca&gt; fincaOptional = fincaRepository.findById(fincaId);</span>
+<span class="fc bfc" id="L129" title="All 2 branches covered.">        if (fincaOptional.isPresent()) {</span>
+<span class="fc" id="L130">            Finca finca = fincaOptional.get();</span>
+<span class="fc" id="L131">            finca.calificar(calificacion); // Método para calificar la finca</span>
+<span class="fc" id="L132">            finca = fincaRepository.save(finca);</span>
+<span class="fc" id="L133">            return modelMapper.map(finca, FincaDto.class);</span>
+        }
+<span class="fc" id="L135">        return null; </span>
+    }
+
+    // Método para obtener fincas de un usuario que es arrendador
+    public List&lt;FincaDto&gt; getFincasByUsuarioIdAndTipo(Long usuarioId) {
+        // Primero, obtener el usuario
+<span class="nc" id="L141">        Optional&lt;Usuario&gt; usuarioOpt = usuarioRepository.findById(usuarioId);</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">        if (usuarioOpt.isPresent()) {</span>
+<span class="nc" id="L143">            Usuario usuario = usuarioOpt.get();</span>
+<span class="nc bnc" id="L144" title="All 2 branches missed.">            if (usuario.getTipo() == Tipo.ARRENDADOR) {</span>
+                // Filtrar las fincas por el id del dueño
+<span class="nc" id="L146">                return fincaRepository.findByDueño(usuario).stream()</span>
+<span class="nc" id="L147">                        .map(finca -&gt; modelMapper.map(finca, FincaDto.class))</span>
+<span class="nc" id="L148">                        .collect(Collectors.toList());</span>
+            }
+        }
+<span class="nc" id="L151">        return List.of(); </span>
+    }
+
+    // Método transferir fincas
+    public void transferirFinca(Long fincaId, Long usuarioId) throws Exception {
+    
+    //Buscar la finca por id
+<span class="nc" id="L158">    Optional&lt;Finca&gt; optionalFinca = fincaRepository.findById(fincaId);</span>
+    
+    //Buscar el usuario por id
+<span class="nc" id="L161">    Optional&lt;Usuario&gt; optionalUsuario = usuarioRepository.findById(usuarioId);</span>
+
+    //Verificar que ambos existan
+<span class="nc bnc" id="L164" title="All 4 branches missed.">    if (optionalFinca.isPresent() &amp;&amp; optionalUsuario.isPresent()) {</span>
+<span class="nc" id="L165">    Finca finca = optionalFinca.get();</span>
+<span class="nc" id="L166">    Usuario nuevodueño = optionalUsuario.get();</span>
+
+    //Cambiar el dueño de la finca
+<span class="nc" id="L169">    finca.setDueño(nuevodueño);</span>
+<span class="nc" id="L170">    fincaRepository.save(finca);</span>
+<span class="nc" id="L171">    }else{</span>
+<span class="nc" id="L172">        throw new Exception(&quot;La finca o el usuario no existen&quot;);</span>
+        }
+<span class="nc" id="L174">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

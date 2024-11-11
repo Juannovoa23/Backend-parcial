@@ -1,0 +1,16 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+arriendo,com.finca.arriendo.model,Tipo,0,15,0,0,0,3,0,1,0,1
+arriendo,com.finca.arriendo.model,Solicitud,6,173,4,10,2,58,5,30,1,27
+arriendo,com.finca.arriendo.model,Finca,36,57,15,3,10,20,11,12,2,12
+arriendo,com.finca.arriendo.model,Estado,0,33,0,0,0,6,0,1,0,1
+arriendo,com.finca.arriendo.model,Usuario,21,84,7,11,6,22,6,12,1,8
+arriendo,com.finca.arriendo,ArriendoApplication,5,3,0,0,2,1,1,1,1,1
+arriendo,com.finca.arriendo,ModelMapperConfiguration,8,272,2,2,0,66,2,10,0,10
+arriendo,com.finca.arriendo,DataLoader,0,1498,0,0,0,86,0,2,0,2
+arriendo,com.finca.arriendo.services,SolicitudService,67,266,8,8,18,63,11,11,3,11
+arriendo,com.finca.arriendo.services,UsuarioService,48,273,11,11,12,57,13,14,2,14
+arriendo,com.finca.arriendo.services,SolicitudService.ResourceNotFoundException,7,0,0,0,3,0,1,0,1,0
+arriendo,com.finca.arriendo.services,FincaService,186,159,16,4,43,32,16,10,7,9
+arriendo,com.finca.arriendo.controllers,FincaController,105,96,5,3,29,20,6,9,2,9
+arriendo,com.finca.arriendo.controllers,SolicitudController,5,44,0,0,1,10,1,8,1,8
+arriendo,com.finca.arriendo.controllers,UsuarioController,62,70,4,2,18,15,4,7,1,7

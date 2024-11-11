@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import com.finca.arriendo.dto.SolicitudDto;
@@ -13,6 +14,9 @@ import com.finca.arriendo.repository.SolicitudRepository;
 @Service
 public class SolicitudService {
 
+    // Crear una instancia de ModelMapper
+    private ModelMapper modelMapper = new ModelMapper();
+
     private final SolicitudRepository solicitudRepository;
 
     public SolicitudService(SolicitudRepository solicitudRepository) {
@@ -21,10 +25,15 @@ public class SolicitudService {
 
     // Crear una nueva solicitud
     public SolicitudDto crearSolicitud(SolicitudDto solicitudDto) {
-        Solicitud solicitud = new Solicitud();
-        mapToEntity(solicitudDto, solicitud);
+        //Crear la entidad a partir del DTO
+        Solicitud solicitud = modelMapper.map(solicitudDto, Solicitud.class);
+
+        //Guardar la solicitud en el repositorio
         Solicitud nuevaSolicitud = solicitudRepository.save(solicitud);
-        return mapToDto(nuevaSolicitud);
+
+        //Mapear la entidad guardada de vuelta al DTO
+        return modelMapper.map(nuevaSolicitud, SolicitudDto.class);
+
     }
 
     // Obtener todas las solicitudes
@@ -85,8 +94,18 @@ public class SolicitudService {
 
     // Métodos privados para mapear entre DTO y entidad
     private SolicitudDto mapToDto(Solicitud solicitud) {
+        // Verificar si la solicitud es nula para evitar NullPointerException
+        if (solicitud == null) {
+        return null; // O puedes lanzar una excepción dependiendo de tu lógica
+        }
+
+
+        // Crear el DTO y mapear los campos
         SolicitudDto dto = new SolicitudDto();
+        
+        //Mapear visibilidad del pago y calificación segun el estado
         dto.setId(solicitud.getId());
+        dto.setEstado(solicitud.getEstado());
         dto.setFechaInicio(solicitud.getFechaInicio());
         dto.setFechaFin(solicitud.getFechaFin());
         dto.setCalifFinca(solicitud.getCalifFinca());
@@ -95,18 +114,26 @@ public class SolicitudService {
         dto.setCantPersonas(solicitud.getCantPersonas());
         dto.setNumeroCuenta(solicitud.getNumeroCuenta());
         dto.setBanco(solicitud.getBanco());
+
+        // Mapear visibilidad del pago y calificación según el estado
+        dto.setPagoVisible(solicitud.isPagoVisible());
+        dto.setCalificacionVisible(solicitud.isCalificacionVisible());
+
         return dto;
     }
 
-    private void mapToEntity(SolicitudDto dto, Solicitud solicitud) {
-        solicitud.setFechaInicio(dto.getFechaInicio());
-        solicitud.setFechaFin(dto.getFechaFin());
-        solicitud.setCalifFinca(dto.getCalifFinca());
-        solicitud.setCalifArrendatario(dto.getCalifArrendatario());
-        solicitud.setPrecio(dto.getPrecio());
-        solicitud.setCantPersonas(dto.getCantPersonas());
-        solicitud.setNumeroCuenta(dto.getNumeroCuenta());
-        solicitud.setBanco(dto.getBanco());
+    private void mapToEntity(SolicitudDto solicitudDto, Solicitud solicitud) {
+        if (solicitudDto == null || solicitud == null) {
+            throw new IllegalArgumentException("SolicitudDto o Solicitud no pueden ser null");
+        }
+        solicitud.setFechaInicio(solicitudDto.getFechaInicio());
+        solicitud.setFechaFin(solicitudDto.getFechaFin());
+        solicitud.setCalifFinca(solicitudDto.getCalifFinca());
+        solicitud.setCalifArrendatario(solicitudDto.getCalifArrendatario());
+        solicitud.setPrecio(solicitudDto.getPrecio());
+        solicitud.setCantPersonas(solicitudDto.getCantPersonas());
+        solicitud.setNumeroCuenta(solicitudDto.getNumeroCuenta());
+        solicitud.setBanco(solicitudDto.getBanco());
     }
 
     public List<SolicitudDto> findByArrendatarioId(Long id) {
@@ -139,11 +166,15 @@ public class SolicitudService {
         
         if (optionalSolicitud.isPresent()) {
             Solicitud solicitud = optionalSolicitud.get();
+            // Actualizar solo los detalles de pago
             solicitud.setNumeroCuenta(numeroCuenta); 
             solicitud.setBanco(banco);
+            
+            // Guardar la solicitud con los nuevos detalles de pago
             Solicitud updatedSolicitud = solicitudRepository.save(solicitud);
             return Optional.of(mapToDto(updatedSolicitud)); 
         }
         return Optional.empty(); 
     }
+    
 }

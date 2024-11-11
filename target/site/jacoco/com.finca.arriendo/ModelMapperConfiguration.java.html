@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ModelMapperConfiguration.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">arriendo</a> &gt; <a href="index.source.html" class="el_package">com.finca.arriendo</a> &gt; <span class="el_source">ModelMapperConfiguration.java</span></div><h1>ModelMapperConfiguration.java</h1><pre class="source lang-java linenums">package com.finca.arriendo;
+
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import com.finca.arriendo.dto.FincaDto;
+import com.finca.arriendo.dto.SolicitudDto;
+import com.finca.arriendo.dto.UsuarioDto;
+import com.finca.arriendo.model.Finca;
+import com.finca.arriendo.model.Solicitud;
+import com.finca.arriendo.model.Tipo;
+import com.finca.arriendo.model.Usuario;
+
+@Configuration
+<span class="fc" id="L17">public class ModelMapperConfiguration {</span>
+
+    @Bean
+    public ModelMapper modelMapper() {
+<span class="fc" id="L21">        ModelMapper modelMapper = new ModelMapper();</span>
+<span class="fc" id="L22">        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);</span>
+
+        // Mapeo para Usuario y UsuarioDto
+<span class="fc" id="L25">        modelMapper.createTypeMap(Usuario.class, UsuarioDto.class).addMappings(mapping -&gt; {</span>
+<span class="fc" id="L26">            mapping.map(Usuario::getId, UsuarioDto::setId);</span>
+<span class="fc" id="L27">            mapping.map(Usuario::getNombre, UsuarioDto::setNombre);</span>
+<span class="fc" id="L28">            mapping.map(Usuario::getApellido, UsuarioDto::setApellido);</span>
+<span class="fc" id="L29">            mapping.map(Usuario::getCorreo, UsuarioDto::setCorreo);</span>
+<span class="fc" id="L30">            mapping.map(Usuario::getTelefono, UsuarioDto::setTelefono);</span>
+<span class="fc" id="L31">            mapping.map(Usuario::getContrasena, UsuarioDto::setContrasena);</span>
+<span class="fc" id="L32">            mapping.map(Usuario::getCalificacion, UsuarioDto::setCalificacion);</span>
+<span class="pc bpc" id="L33" title="1 of 2 branches missed.">            mapping.map(src -&gt; src.getTipo() != null ? src.getTipo().name() : &quot;DESCONOCIDO&quot;, UsuarioDto::setTipo);</span>
+<span class="fc" id="L34">        });</span>
+
+<span class="fc" id="L36">        modelMapper.createTypeMap(UsuarioDto.class, Usuario.class).addMappings(mapping -&gt; {</span>
+<span class="fc" id="L37">            mapping.map(UsuarioDto::getId, Usuario::setId);</span>
+<span class="fc" id="L38">            mapping.map(UsuarioDto::getNombre, Usuario::setNombre);</span>
+<span class="fc" id="L39">            mapping.map(UsuarioDto::getApellido, Usuario::setApellido);</span>
+<span class="fc" id="L40">            mapping.map(UsuarioDto::getCorreo, Usuario::setCorreo);</span>
+<span class="fc" id="L41">            mapping.map(UsuarioDto::getTelefono, Usuario::setTelefono);</span>
+<span class="fc" id="L42">            mapping.map(UsuarioDto::getContrasena, Usuario::setContrasena);</span>
+<span class="fc" id="L43">            mapping.map(UsuarioDto::getCalificacion, Usuario::setCalificacion);</span>
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">            mapping.map(dto -&gt; dto.getTipo() != null ? Tipo.valueOf(dto.getTipo()) : Tipo.ARRENDATARIO, Usuario::setTipo);</span>
+<span class="fc" id="L45">        });</span>
+
+        // Mapeo para Solicitud y SolicitudDto
+<span class="fc" id="L48">        modelMapper.createTypeMap(Solicitud.class, SolicitudDto.class).addMappings(mapping -&gt; {</span>
+<span class="fc" id="L49">            mapping.map(Solicitud::getId, SolicitudDto::setId);</span>
+<span class="fc" id="L50">            mapping.map(Solicitud::getFechaInicio, SolicitudDto::setFechaInicio);</span>
+<span class="fc" id="L51">            mapping.map(Solicitud::getFechaFin, SolicitudDto::setFechaFin);</span>
+<span class="fc" id="L52">            mapping.map(Solicitud::getCalifFinca, SolicitudDto::setCalifFinca);</span>
+<span class="fc" id="L53">            mapping.map(Solicitud::getCalifArrendatario, SolicitudDto::setCalifArrendatario);</span>
+<span class="fc" id="L54">            mapping.map(Solicitud::getPrecio, SolicitudDto::setPrecio);</span>
+<span class="fc" id="L55">            mapping.map(Solicitud::getCantPersonas, SolicitudDto::setCantPersonas);</span>
+<span class="fc" id="L56">        });</span>
+
+<span class="fc" id="L58">        modelMapper.createTypeMap(SolicitudDto.class, Solicitud.class).addMappings(mapping -&gt; {</span>
+<span class="fc" id="L59">            mapping.map(SolicitudDto::getId, Solicitud::setId);</span>
+<span class="fc" id="L60">            mapping.map(SolicitudDto::getFechaInicio, Solicitud::setFechaInicio);</span>
+<span class="fc" id="L61">            mapping.map(SolicitudDto::getFechaFin, Solicitud::setFechaFin);</span>
+<span class="fc" id="L62">            mapping.map(SolicitudDto::getCalifFinca, Solicitud::setCalifFinca);</span>
+<span class="fc" id="L63">            mapping.map(SolicitudDto::getCalifArrendatario, Solicitud::setCalifArrendatario);</span>
+<span class="fc" id="L64">            mapping.map(SolicitudDto::getPrecio, Solicitud::setPrecio);</span>
+<span class="fc" id="L65">            mapping.map(SolicitudDto::getCantPersonas, Solicitud::setCantPersonas);</span>
+<span class="fc" id="L66">        });</span>
+
+        // Mapeo para Finca y FincaDto
+<span class="fc" id="L69">        modelMapper.createTypeMap(Finca.class, FincaDto.class).addMappings(mapping -&gt; {</span>
+<span class="fc" id="L70">            mapping.map(Finca::getId, FincaDto::setId);</span>
+<span class="fc" id="L71">            mapping.map(Finca::getNombre, FincaDto::setNombre);</span>
+<span class="fc" id="L72">            mapping.map(Finca::getUbicacion, FincaDto::setUbicacion); // Asegúrate de que los tipos sean compatibles</span>
+<span class="fc" id="L73">            mapping.map(Finca::getDepartamento, FincaDto::setDepartamento);</span>
+<span class="fc" id="L74">            mapping.map(Finca::getMunicipio, FincaDto::setMunicipio);</span>
+<span class="fc" id="L75">            mapping.map(Finca::getPrecioDefecto, FincaDto::setPrecioDefecto);</span>
+<span class="fc" id="L76">            mapping.map(Finca::getDisponible, FincaDto::setDisponible);</span>
+<span class="fc" id="L77">            mapping.map(Finca::getCalificacion, FincaDto::setCalificacion);</span>
+<span class="fc" id="L78">            mapping.map(Finca::getCapacidad, FincaDto::setCapacidad);</span>
+<span class="fc" id="L79">            mapping.map(Finca::getDescripcion, FincaDto::setDescripcion);</span>
+<span class="fc" id="L80">        });</span>
+
+<span class="fc" id="L82">        modelMapper.createTypeMap(FincaDto.class, Finca.class).addMappings(mapping -&gt; {</span>
+<span class="fc" id="L83">            mapping.map(FincaDto::getId, Finca::setId);</span>
+<span class="fc" id="L84">            mapping.map(FincaDto::getNombre, Finca::setNombre);</span>
+<span class="fc" id="L85">            mapping.map(FincaDto::getUbicacion, Finca::setUbicacion); // Asegúrate de que los tipos sean compatibles</span>
+<span class="fc" id="L86">            mapping.map(FincaDto::getDepartamento, Finca::setDepartamento);</span>
+<span class="fc" id="L87">            mapping.map(FincaDto::getMunicipio, Finca::setMunicipio);</span>
+<span class="fc" id="L88">            mapping.map(FincaDto::getPrecioDefecto, Finca::setPrecioDefecto);</span>
+<span class="fc" id="L89">            mapping.map(FincaDto::getDisponible, Finca::setDisponible);</span>
+<span class="fc" id="L90">            mapping.map(FincaDto::getCalificacion, Finca::setCalificacion);</span>
+<span class="fc" id="L91">            mapping.map(FincaDto::getCapacidad, Finca::setCapacidad);</span>
+<span class="fc" id="L92">            mapping.map(FincaDto::getDescripcion, Finca::setDescripcion);</span>
+<span class="fc" id="L93">        });</span>
+
+<span class="fc" id="L95">        return modelMapper;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
