@@ -5,13 +5,15 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.finca.arriendo.dto.ContratoDto;
 import com.finca.arriendo.dto.FincaDto;
 import com.finca.arriendo.dto.SolicitudDto;
-import com.finca.arriendo.dto.UsuarioDto;
+import com.finca.arriendo.dto.UsuarioDto; // Importar el nuevo DTO
+import com.finca.arriendo.model.Contrato;
 import com.finca.arriendo.model.Finca;
 import com.finca.arriendo.model.Solicitud;
 import com.finca.arriendo.model.Tipo;
-import com.finca.arriendo.model.Usuario;
+import com.finca.arriendo.model.Usuario; // Importar la nueva entidad
 
 @Configuration
 public class ModelMapperConfiguration {
@@ -90,6 +92,31 @@ public class ModelMapperConfiguration {
             mapping.map(FincaDto::getCalificacion, Finca::setCalificacion);
             mapping.map(FincaDto::getCapacidad, Finca::setCapacidad);
             mapping.map(FincaDto::getDescripcion, Finca::setDescripcion);
+        });
+
+        // Mapeo para Contrato y ContratoDto
+        modelMapper.createTypeMap(Contrato.class, ContratoDto.class).addMappings(mapping -> {
+            mapping.map(Contrato::getId, ContratoDto::setId);
+            mapping.map(Contrato::getIdentificador, ContratoDto::setIdentificador);
+            mapping.map(Contrato::getValor, ContratoDto::setValor);
+            mapping.map(Contrato::getNombreContratante, ContratoDto::setNombreContratante);
+            mapping.map(Contrato::getDocumentoContratante, ContratoDto::setDocumentoContratante);
+            mapping.map(Contrato::getNombreContratantista, ContratoDto::setNombreContratantista);
+            mapping.map(Contrato::getDocumentoContratantista, ContratoDto::setDocumentoContratantista);
+            mapping.map(Contrato::getFechaInicial, ContratoDto::setFechaInicial);
+            mapping.map(Contrato::getFechaFinal, ContratoDto::setFechaFinal);
+        });
+
+        modelMapper.createTypeMap(ContratoDto.class, Contrato.class).addMappings(mapping -> {
+            mapping.map(ContratoDto::getId, Contrato::setId);
+            mapping.map(ContratoDto::getIdentificador, Contrato::setIdentificador);
+            mapping.map(ContratoDto::getValor, Contrato::setValor);
+            mapping.map(ContratoDto::getNombreContratante, Contrato::setNombreContratante);
+            mapping.map(ContratoDto::getDocumentoContratante, Contrato::setDocumentoContratante);
+            mapping.map(ContratoDto::getNombreContratantista, Contrato::setNombreContratantista);
+            mapping.map(ContratoDto::getDocumentoContratantista, Contrato::setDocumentoContratantista);
+            mapping.map(ContratoDto::getFechaInicial, Contrato::setFechaInicial);
+            mapping.map(ContratoDto::getFechaFinal, Contrato::setFechaFinal);
         });
 
         return modelMapper;
